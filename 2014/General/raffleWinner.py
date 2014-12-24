@@ -1,11 +1,12 @@
-import csv
-import random
+import csv, random
 import matplotlib.pyplot as plt
 import numpy as np
+
 #-----Global Variables------#
 responders = []
 finalResponders = []
 #---------------------------#
+
 def main(csvFile):
 	# properly format response data from csv file
 	contestants = createResponseList(csvFile)
