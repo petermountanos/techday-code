@@ -1,0 +1,8 @@
+# READ ME
+# BREAKOUT - WANTAGH TECHDAY CS.003
+
+In order to run breakout, the following libraries must be installed on your Python environment:
+	- Cython
+	- Kivy
+
+

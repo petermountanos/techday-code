@@ -1,0 +1,345 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Class GameController &mdash; Breakout 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Breakout 1.0.0 documentation" href="index.html" />
+    <link rel="up" title="Game Classes" href="game.html" />
+    <link rel="next" title="Graphics Objects" href="graphics.html" />
+    <link rel="prev" title="Class GameView" href="gameview.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="graphics.html" title="Graphics Objects"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="gameview.html" title="Class GameView"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Breakout 1.0.0 documentation</a> &raquo;</li>
+          <li><a href="game.html" accesskey="U">Game Classes</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="class-gamecontroller">
+<h1>Class GameController<a class="headerlink" href="#class-gamecontroller" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="breakoutGraphics.GameController">
+<em class="property">class </em><tt class="descclassname">breakoutGraphics.</tt><tt class="descname">GameController</tt><a class="reference internal" href="_modules/breakoutGraphics.html#GameController"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#breakoutGraphics.GameController" title="Permalink to this definition">¶</a></dt>
+<dd><p>Primary controller class for a simple game application.</p>
+<p>To create a game application, subclass this class. Make sure
+to add a call to super to your constructor (should you choose
+to override the constructor at all). To provide game functionality
+you only need to override the following five methods:</p>
+<blockquote>
+<div><p><cite>initialize</cite>: Called at the start of the game to initialize your
+program.  It is preferable to put start-up code here rather than
+in your constructor.</p>
+<p><cite>update</cite>: Called every animation frame (60x a second). This is
+where you add any game animation code.</p>
+<p><cite>on_touch_down</cite>: Called whenever the user presses the mouse or
+a finger (for a touch screen device).</p>
+<p><cite>on_touch_up</cite>: Called whenever the user releases the mouse or
+a finger (for a touch screen device).  Every touch_down event
+has a corresponding touch_up event.</p>
+<p><cite>on_touch_move</cite>: Called whenever the user moves the mouse or
+a finger while it is still help down.  touch_move events are
+optional for each press, while touch_down and touch_up are not.</p>
+</div></blockquote>
+<p>These are the only methods that you <em>must</em> implement.  In addition,
+you should add whatever fields and/or helper methods are necessary
+for your game.</p>
+<p>Except in very few instances you should never need to add properties
+to a <cite>GameController</cite>.  As the controller, it manages all of the
+objects in the game, and none of the other objects need to access
+its fields.</p>
+</dd></dl>
+
+<div class="section" id="immutable-attributes">
+<h2>Immutable Attributes<a class="headerlink" href="#immutable-attributes" title="Permalink to this headline">¶</a></h2>
+<p>These attributes may be read (e.g. used in an expression), but not altered.</p>
+<dl class="attribute">
+<dt id="breakoutGraphics.GameController.view">
+<tt class="descclassname">GameController.</tt><tt class="descname">view</tt><a class="reference internal" href="_modules/breakoutGraphics.html#GameController.view"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#breakoutGraphics.GameController.view" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Game view.</p>
+<p>This attribute is <em>immutable</em> in that you cannot delete it or
+replace it by another view.  However, the view itself is not
+immutable.  You are free to use the <cite>add</cite> and <cite>remove</cite> methods
+in this attribute to add and remove graphics objects.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="methods">
+<h2>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="methods-to-override">
+<h3>Methods to Override<a class="headerlink" href="#methods-to-override" title="Permalink to this headline">¶</a></h3>
+<dl class="method">
+<dt id="breakoutGraphics.GameController.initialize">
+<tt class="descclassname">GameController.</tt><tt class="descname">initialize</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/breakoutGraphics.html#GameController.initialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#breakoutGraphics.GameController.initialize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called to initialize the game features.</p>
+<p>This method is the preferred way to initialize the elements in your
+game, rather than overriding your constructor.  Because of the way
+graphical applications work, you cannot guarantee that the view window
+is sized properly when you are still inside of the constructor.  This
+method is called later, when we can guarantee that the window and
+other graphics elements have the right size.</p>
+<p><em>Override this method to provide code specific to your game.</em></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="breakoutGraphics.GameController.update">
+<tt class="descclassname">GameController.</tt><tt class="descname">update</tt><big>(</big><em>dt</em><big>)</big><a class="reference internal" href="_modules/breakoutGraphics.html#GameController.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#breakoutGraphics.GameController.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called every animation frame.</p>
+<blockquote>
+<div><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">param dt:</th><td class="field-body">time in seconds since last update</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Precondition</strong>: a number (int or float)</p>
+</div></blockquote>
+<p>This method is called 60x a second to provide on-screen animation.
+Think of it as the body of the loop.  It is best to have fields
+that represent the current animation state so that you know where
+you are in the animation.</p>
+<p><em>Override this method to provide code specific to your game.</em></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="breakoutGraphics.GameController.on_touch_down">
+<tt class="descclassname">GameController.</tt><tt class="descname">on_touch_down</tt><big>(</big><em>view</em>, <em>touch</em><big>)</big><a class="reference internal" href="_modules/breakoutGraphics.html#GameController.on_touch_down"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#breakoutGraphics.GameController.on_touch_down" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when the user presses the mouse or a finger (on touch screens)</p>
+<blockquote>
+<div><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">param view:</th><td class="field-body">view receiving touch event</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Precondition</strong>: the <cite>GameView</cite> of this <cite>GameController</cite></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">param touch:</th><td class="field-body">touch event information</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Precondition</strong>: a Kivy <a class="reference external" href="http://kivy.org/docs/api-kivy.input.motionevent.html#kivy.input.motionevent.MotionEvent">MotionEvent</a> object</p>
+</div></blockquote>
+<p>This method responds to a touch_down event.  If you want the user to
+&#8216;click to continue&#8217;, or if you want to control a paddle on screen,
+this is the primary method for responding to those controls.  Every
+touch_down event is followed by a touch_up event.</p>
+<p><em>Override this method to provide code specific to your game.</em></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="breakoutGraphics.GameController.on_touch_up">
+<tt class="descclassname">GameController.</tt><tt class="descname">on_touch_up</tt><big>(</big><em>view</em>, <em>touch</em><big>)</big><a class="reference internal" href="_modules/breakoutGraphics.html#GameController.on_touch_up"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#breakoutGraphics.GameController.on_touch_up" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when the user releases the mouse or a finger (on touch screens)</p>
+<blockquote>
+<div><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">param view:</th><td class="field-body">view receiving touch event</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Precondition</strong>: the <cite>GameView</cite> of this <cite>GameController</cite></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">param touch:</th><td class="field-body">touch event information</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Precondition</strong>: a Kivy <a class="reference external" href="http://kivy.org/docs/api-kivy.input.motionevent.html#kivy.input.motionevent.MotionEvent">MotionEvent</a> object</p>
+</div></blockquote>
+<p>This method responds to a touch_up event. As every touch_down event has
+a corresponding touch_up event, this lets you know when the mouse or finger
+has been released. At this point you should reset whatever state fields
+you had following the touch, as appropriate.</p>
+<p><em>Override this method to provide code specific to your game.</em></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="breakoutGraphics.GameController.on_touch_move">
+<tt class="descclassname">GameController.</tt><tt class="descname">on_touch_move</tt><big>(</big><em>view</em>, <em>touch</em><big>)</big><a class="reference internal" href="_modules/breakoutGraphics.html#GameController.on_touch_move"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#breakoutGraphics.GameController.on_touch_move" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when the user moves the mouse or a finger (on touch screens)</p>
+<blockquote>
+<div><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">param view:</th><td class="field-body">view receiving touch event</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Precondition</strong>: the <cite>GameView</cite> of this <cite>GameController</cite></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">param touch:</th><td class="field-body">touch event information</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Precondition</strong>: a Kivy <a class="reference external" href="http://kivy.org/docs/api-kivy.input.motionevent.html#kivy.input.motionevent.MotionEvent">MotionEvent</a> object</p>
+</div></blockquote>
+<p>This method responds to a touch_move event. Touch moves are optional
+events and do not always need to be processed.  However, they are important
+if you want the touch to move a graphics object on screen, such as a paddle.</p>
+<p><em>Override this method to provide code specific to your game.</em></p>
+</dd></dl>
+
+</div>
+<div class="section" id="utility-methods">
+<h3>Utility Methods<a class="headerlink" href="#utility-methods" title="Permalink to this headline">¶</a></h3>
+<dl class="method">
+<dt id="breakoutGraphics.GameController.delay">
+<tt class="descclassname">GameController.</tt><tt class="descname">delay</tt><big>(</big><em>callback</em>, <em>time</em><big>)</big><a class="reference internal" href="_modules/breakoutGraphics.html#GameController.delay"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#breakoutGraphics.GameController.delay" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delay the execution of callback for time seconds.</p>
+<blockquote>
+<div><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">param callback:</th><td class="field-body">function called after delay</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Precondition</strong>: a function reference; must be a function with no additional arguments</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">param time:</th><td class="field-body">time to wait in seconds before calling the function.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Precondition</strong>: a positive number (int or float)</p>
+</div></blockquote>
+<p>You may have multiple callbacks delayed at any given time.  However,
+you be careful about called <cite>delay</cite> inside of callback functions already
+delayed.  The result is similar to recursion in that it can run out
+of memory if you do it too much.</p>
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Class GameController</a><ul>
+<li><a class="reference internal" href="#immutable-attributes">Immutable Attributes</a></li>
+<li><a class="reference internal" href="#methods">Methods</a><ul>
+<li><a class="reference internal" href="#methods-to-override">Methods to Override</a></li>
+<li><a class="reference internal" href="#utility-methods">Utility Methods</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="gameview.html"
+                        title="previous chapter">Class GameView</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="graphics.html"
+                        title="next chapter">Graphics Objects</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/gamecontroller.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="graphics.html" title="Graphics Objects"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="gameview.html" title="Class GameView"
+             >previous</a> |</li>
+        <li><a href="index.html">Breakout 1.0.0 documentation</a> &raquo;</li>
+          <li><a href="game.html" >Game Classes</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Peter J. Mountanos.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.
+    </div>
+  </body>
+</html>

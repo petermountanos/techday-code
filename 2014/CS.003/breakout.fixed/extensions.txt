@@ -1,0 +1,36 @@
+# extensions.txt
+# Wantagh techDay - CS.003 Lecture 3
+# Created by:    Peter Mountanos
+# Date Created:  11/22/13
+# Last Modified: 11/22/13
+
+
+Extensions Done: I converted the Ball() class into a subclass of graphicsImage
+in order to be able to use images for the ball. The top bar of my Breakout
+now has a Life Counter, Level Counter, and Score Counter.  The Life Counter
+lets the user have a constant view of how many lives they have remaining.
+The Level Counter lets the user know what level they are currently on. I
+added in this notion of 'Level', and it means that everytime the player
+clears the board of bricks, they have the opportunity to quit, or move on
+to the next level (essentially a level is increased by one every time the
+player 'wins' in the original sense of the game). The score counter lets
+the player know what their score is. Score is carried over each level, but
+not if the player loses. The score is increased by ten for every brick the
+player clears. The try-again extension was sort of mentioned earlier, but
+what it does is if the player loses, they can just click on the screen to
+play again (without having to rerun the program). However, if they clear
+the screen of bricks, clicking the screen will prompt them to the next level.
+I also extended the game with audio files. When the player is waiting for the
+next ball to be served, a 'tick tock' sound is played, counting down the time
+until the next ball comes (does not play on the first ball). Also, a 'warp up'
+sound plays the first time the program is started. It plays everytime the game
+has restarted also (when player loses lives and wants to play again). Another
+sound effect that is used is when the paddle hits the paddle.  When the ball
+hits the paddle, it plays the file 'bounce.wav'. A sound is also made each time
+the ball hits a brick, a different sound is played each time the ball hits a b-
+rick. This is done with the BRICKS_AUDIO list, and it goes through each file in
+that list  sequentially, and starts back at the first each it finishes the list.
+Also, there isa sound toggle (play and pause buttons) that allow the player to
+turn the sound effects on or off. However, this is implements after the next
+action (i.e. if a sound is already playing when the pause button is clicked,
+it will finish that sound, and not play anymore sounds)."""

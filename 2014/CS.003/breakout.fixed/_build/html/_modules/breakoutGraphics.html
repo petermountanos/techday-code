@@ -1,0 +1,988 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>breakoutGraphics &mdash; Breakout 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Breakout 1.0.0 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">Breakout 1.0.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for breakoutGraphics</h1><div class="highlight"><pre>
+<span class="c"># breakoutGraphics.py</span>
+<span class="c"># Wantagh techDay - CS.003 Lecture 3</span>
+<span class="c"># Created by:   Peter Mountanos</span>
+<span class="c"># Modified from: Walker White (Cornell University)</span>
+<span class="c"># Date Created:  11/21/13</span>
+<span class="c"># Last Modified: 11/22/13</span>
+
+<span class="sd">&quot;&quot;&quot;Graphics classes for the final project of CS.003, Breakout</span>
+
+<span class="sd">            *** DO NOT MODIFY THE CODE IN THIS FILE ***</span>
+
+<span class="sd">These graphics classes are to be used as building blocks for your</span>
+<span class="sd">final project. Use instances of these classes (or subclass them) </span>
+<span class="sd">to help make your game. See documentation for more guidance --</span>
+<span class="sd">it is the worksheet we handed to you, and it includes information</span>
+<span class="sd">not displayed in this module.&quot;&quot;&quot;</span>
+
+<span class="c"># Kivy Object Imports</span>
+<span class="kn">from</span> <span class="nn">kivy.properties</span> <span class="kn">import</span> <span class="n">ListProperty</span><span class="p">,</span> <span class="n">StringProperty</span>
+<span class="kn">from</span> <span class="nn">kivy.uix.floatlayout</span> <span class="kn">import</span> <span class="n">FloatLayout</span>
+<span class="kn">from</span> <span class="nn">kivy.uix.widget</span> <span class="kn">import</span> <span class="n">Widget</span>
+<span class="kn">from</span> <span class="nn">kivy.uix.label</span> <span class="kn">import</span> <span class="n">Label</span>
+<span class="kn">from</span> <span class="nn">kivy.clock</span> <span class="kn">import</span> <span class="n">Clock</span>
+
+<span class="c"># Import Non-Kivy Libraries</span>
+<span class="kn">import</span> <span class="nn">pygame.mixer</span>
+<span class="kn">import</span> <span class="nn">colormodel</span>
+<span class="kn">import</span> <span class="nn">os.path</span>
+<span class="kn">from</span> <span class="nn">constants</span> <span class="kn">import</span> <span class="o">*</span> 
+
+<span class="c"># Import Kivy language file with visual interface information</span>
+<span class="kn">from</span> <span class="nn">kivy.lang</span> <span class="kn">import</span> <span class="n">Builder</span> 
+<span class="n">Builder</span><span class="o">.</span><span class="n">load_file</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">),</span> <span class="s">&#39;graphics.kv&#39;</span><span class="p">)))</span>
+
+<span class="c"># User-defined resources</span>
+<span class="n">FONT_PATH</span>  <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">),</span> <span class="s">&#39;Fonts&#39;</span><span class="p">))</span>
+<span class="n">SOUND_PATH</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">),</span> <span class="s">&#39;Sounds&#39;</span><span class="p">))</span>
+<span class="n">IMAGE_PATH</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">),</span> <span class="s">&#39;Images&#39;</span><span class="p">))</span>
+
+<span class="c"># Kivy Resources</span>
+<span class="kn">import</span> <span class="nn">kivy.resources</span>
+<span class="n">kivy</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">resource_add_path</span><span class="p">(</span><span class="n">FONT_PATH</span><span class="p">)</span>
+<span class="n">kivy</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">resource_add_path</span><span class="p">(</span><span class="n">SOUND_PATH</span><span class="p">)</span>
+<span class="n">kivy</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">resource_add_path</span><span class="p">(</span><span class="n">IMAGE_PATH</span><span class="p">)</span>
+
+<span class="c"># Initialize the sound engine</span>
+<span class="n">FREQUENCY</span><span class="o">=</span><span class="mi">44100</span>
+<span class="n">BITSIZE</span><span class="o">=-</span><span class="mi">16</span>
+<span class="n">CHANNELS</span><span class="o">=</span><span class="mi">2</span>
+<span class="n">BUFFER</span><span class="o">=</span><span class="mi">1024</span>
+<span class="n">pygame</span><span class="o">.</span><span class="n">mixer</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">FREQUENCY</span><span class="p">,</span><span class="n">BITSIZE</span><span class="p">,</span><span class="n">CHANNELS</span><span class="p">,</span><span class="n">BUFFER</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">Sound</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Creates a new Sound object for the given file.</span>
+
+<span class="sd">    This function is a proxy for the pygame.mixer.Sound class.  That class requires</span>
+<span class="sd">    some difficult initialization in order to work properly.  In order to hide that from</span>
+<span class="sd">    the students, we have given them this function to use instead.  Treat this function just</span>
+<span class="sd">    like a constructor (except that the object type is pygame.mixer.Sound, not Sound).</span>
+
+<span class="sd">        :param filename: string providing the name of a sound file</span>
+
+<span class="sd">    See the documentation for more information.&quot;&quot;&quot;</span>
+    <span class="n">absname</span> <span class="o">=</span> <span class="n">filename</span> <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isabs</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">SOUND_PATH</span><span class="p">,</span> <span class="n">filename</span><span class="p">))</span>
+    <span class="c"># if filename is absolute path, set filename equal to path, else join the sound path and then the filename</span>
+    <span class="k">return</span> <span class="n">pygame</span><span class="o">.</span><span class="n">mixer</span><span class="o">.</span><span class="n">Sound</span><span class="p">(</span><span class="n">absname</span><span class="p">)</span> <span class="c"># returns pygame.mixer.Sound class</span>
+
+
+<div class="viewcode-block" id="graphicsObject"><a class="viewcode-back" href="../gobject.html#breakoutGraphics.graphicsObject">[docs]</a><span class="k">class</span> <span class="nc">graphicsObject</span><span class="p">(</span><span class="n">Widget</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;The base graphics object for a `GameView` class.</span>
+
+<span class="sd">    You should never create a graphicsObject directly. Instead, you should</span>
+<span class="sd">    initialize one of its subclasses: graphicsRectangle, graphicsEllipse,</span>
+<span class="sd">    graphicsLine, graphicsImage, or graphicsLabel.&quot;&quot;&quot;</span>
+
+    <span class="c"># Fields - reference associated properties for info.</span>
+    <span class="n">_fillcolor</span> <span class="o">=</span> <span class="n">colormodel</span><span class="o">.</span><span class="n">RGB</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>  <span class="c"># fill color field</span>
+    <span class="n">_linecolor</span> <span class="o">=</span> <span class="n">colormodel</span><span class="o">.</span><span class="n">RGB</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>  <span class="c"># line color field</span>
+
+    <span class="c"># Kivy Properties - for integration with graphics.kv</span>
+    <span class="n">_kivy_fill_color</span> <span class="o">=</span> <span class="n">ListProperty</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span> <span class="c"># Kivy representation of fill color field</span>
+    <span class="n">_kivy_line_color</span> <span class="o">=</span> <span class="n">ListProperty</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span> <span class="c"># Kivy representation of line color field</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">fillcolor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The object fill color.Used to color the backgrounds, or,</span>
+<span class="sd">        in the case of solid shapes, the shape&#39;s interior.</span>
+
+<span class="sd">        **Invariant**: must be an RGB object from module `colormodel`.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fillcolor</span>
+    
+    <span class="nd">@fillcolor.setter</span>
+<div class="viewcode-block" id="graphicsObject.fillcolor"><a class="viewcode-back" href="../gobject.html#breakoutGraphics.graphicsObject.fillcolor">[docs]</a>    <span class="k">def</span> <span class="nf">fillcolor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">value</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">==</span> <span class="n">colormodel</span><span class="o">.</span><span class="n">RGB</span><span class="p">,</span> <span class="sb">`value`</span><span class="o">+</span><span class="s">&#39; is not a valid color&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fillcolor</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_kivy_fill_color</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">openGLColor</span><span class="p">()</span>
+        </div>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">linecolor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The object line color.</span>
+
+<span class="sd">        Used to color the foreground, text, or, in case of solid shapes, the</span>
+<span class="sd">        shape border.</span>
+
+<span class="sd">        **Invariant**: must be an RGB object from module `colormodel`.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_linecolor</span>
+    
+    <span class="nd">@linecolor.setter</span>
+<div class="viewcode-block" id="graphicsObject.linecolor"><a class="viewcode-back" href="../gobject.html#breakoutGraphics.graphicsObject.linecolor">[docs]</a>    <span class="k">def</span> <span class="nf">linecolor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">value</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">==</span> <span class="n">colormodel</span><span class="o">.</span><span class="n">RGB</span><span class="p">,</span> <span class="sb">`value`</span><span class="o">+</span><span class="s">&#39; is not a valid color&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_linecolor</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_kivy_line_color</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">openGLColor</span><span class="p">()</span>
+</div>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">keywords</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;**Constructor**: creates a new graphics object.</span>
+
+<span class="sd">            :param keywords: dictionary of keyword arguments</span>
+
+<span class="sd">        To use the constructor for this class, you should provide</span>
+<span class="sd">        it with a list of keyword arguments that initialize various</span>
+<span class="sd">        attributes. For example, to initialize the x position and the</span>
+<span class="sd">        fill color, use the constructor call</span>
+<span class="sd">            graphicsObject(x=2,fillColor=colormodel.RED)</span>
+<span class="sd">        You do not need to provide the keywords as a dictionary. </span>
+<span class="sd">        The ** in the parameter `keywords` does that automatically.</span>
+<span class="sd">        </span>
+<span class="sd">        Any attribute of this clas may be used as a keyword. The</span>
+<span class="sd">        argument must satisfy the invariants of that attribute. See </span>
+<span class="sd">        the list of attributes of this class for more information.&quot;&quot;&quot;</span>
+
+        <span class="nb">super</span><span class="p">(</span><span class="n">graphicsObject</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">keywords</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s">&#39;fillcolor&#39;</span> <span class="ow">in</span> <span class="n">keywords</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fillcolor</span> <span class="o">=</span> <span class="n">keywords</span><span class="p">[</span><span class="s">&#39;fillcolor&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s">&#39;linecolor&#39;</span> <span class="ow">in</span> <span class="n">keywords</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">linecolor</span> <span class="o">=</span> <span class="n">keywords</span><span class="p">[</span><span class="s">&#39;linecolor&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">size_hint</span> <span class="o">=</span> <span class="p">(</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">)</span>
+    
+
+<div class="viewcode-block" id="graphicsObject.collide_widget"><a class="viewcode-back" href="../gobject.html#breakoutGraphics.graphicsObject.collide_widget">[docs]</a>    <span class="k">def</span> <span class="nf">collide_widget</span><span class="p">(</span><span class="n">w</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Prevents students from using this built-in method&quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+
+</div></div>
+<div class="viewcode-block" id="graphicsLine"><a class="viewcode-back" href="../gline.html#breakoutGraphics.graphicsLine">[docs]</a><span class="k">class</span> <span class="nc">graphicsLine</span><span class="p">(</span><span class="n">graphicsObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Instance represent a sequence of line segments in the `GameView`</span>
+
+<span class="sd">    The line is defined by the `points` attribute which is an (even) sequence</span>
+<span class="sd">    of alternating x and y values. When added to the graphics view, the view</span>
+<span class="sd">    draws a sequence of line segments, starting from one x-y pair in `points`</span>
+<span class="sd">    and going to the next x-y pair. If `points` has a length 2n, then the </span>
+<span class="sd">    result is n-1 line segments.</span>
+
+<span class="sd">    The object uses the attribute `lineColor` to determine the color of the</span>
+<span class="sd">    line. The attribute `fillColor` is unused (even though it is inherited</span>
+<span class="sd">    from `graphicsObject`).&quot;&quot;&quot;</span>
+    <span class="c"># Kivy Property: requires manual documentation due to no docstring</span>
+    <span class="c"># List of floats of length 2n representing a sequence of x-y pairs.</span>
+    <span class="n">points</span> <span class="o">=</span> <span class="n">ListProperty</span><span class="p">([])</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">keywords</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;**Constructor**: creates a new sequence of line segments.</span>
+<span class="sd">        </span>
+<span class="sd">            :param keywords: dictionary of keyword arguments </span>
+<span class="sd">        </span>
+<span class="sd">        To use the constructor for this class, you should provide</span>
+<span class="sd">        it with a list of keyword arguments that initialize various</span>
+<span class="sd">        attributes. For example, to create a line from (0,0) to</span>
+<span class="sd">        (2,3), use the constructor call:</span>
+<span class="sd">                graphicsLine(points=[0,0,2,3])</span>
+
+<span class="sd">        This class supports the same keywords as `graphicsObject`.  </span>
+<span class="sd">        In addition, it supports the keyword `points` for the attribute</span>
+<span class="sd">        of the same name.</span>
+<span class="sd">        </span>
+<span class="sd">        The attributes size and pos are redundant in objects for</span>
+<span class="sd">        this class.  They are computed automatically from `points`.&quot;&quot;&quot;</span>
+
+        <span class="nb">super</span><span class="p">(</span><span class="n">graphicsLine</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">keywords</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s">&#39;points&#39;</span> <span class="ow">in</span> <span class="n">keywords</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">points</span> <span class="o">=</span> <span class="n">keywords</span><span class="p">[</span><span class="s">&#39;points&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">points</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="n">points</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_resize</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_resize</span><span class="p">()</span>
+        
+    <span class="c"># Compute the size and pos from the list of points</span>
+    <span class="c"># Also checks invariant on the point list</span>
+    <span class="k">def</span> <span class="nf">_resize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">instance</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">value</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="n">mxx</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="n">mxy</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="n">mnx</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="n">mny</span> <span class="o">=</span> <span class="bp">None</span>
+        
+        <span class="n">xpos</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="sb">`p`</span><span class="o">+</span><span class="s">&#39; does not have even length&#39;</span>
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="nb">type</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span><span class="nb">float</span><span class="p">),</span> <span class="sb">`p`</span><span class="o">+</span><span class="s">&#39; is not a number&#39;</span>
+            <span class="k">if</span> <span class="n">xpos</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">mxx</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">mxx</span> <span class="o">&lt;</span> <span class="n">p</span><span class="p">:</span>
+                    <span class="n">mxx</span> <span class="o">=</span> <span class="n">p</span>
+                <span class="k">if</span> <span class="n">mnx</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">mnx</span> <span class="o">&gt;</span> <span class="n">p</span><span class="p">:</span>
+                    <span class="n">mnx</span> <span class="o">=</span> <span class="n">p</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">mxy</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">mxy</span> <span class="o">&lt;</span> <span class="n">p</span><span class="p">:</span>
+                    <span class="n">mxy</span> <span class="o">=</span> <span class="n">p</span>
+                <span class="k">if</span> <span class="n">mny</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">mny</span> <span class="o">&gt;</span> <span class="n">p</span><span class="p">:</span>
+                    <span class="n">mny</span> <span class="o">=</span> <span class="n">p</span>
+            <span class="n">xpos</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">xpos</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="p">(</span><span class="n">mxx</span><span class="o">-</span><span class="n">mnx</span><span class="p">,</span><span class="n">mxy</span><span class="o">-</span><span class="n">mny</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pos</span> <span class="o">=</span> <span class="p">(</span><span class="n">mnx</span><span class="p">,</span><span class="n">mny</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="graphicsTriangle"><a class="viewcode-back" href="../gtriangle.html#breakoutGraphics.graphicsTriangle">[docs]</a><span class="k">class</span> <span class="nc">graphicsTriangle</span><span class="p">(</span><span class="n">graphicsObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Instances represents a triangle in the `GameView`</span>
+
+<span class="sd">    The triangle is defined by the attribute `points` which is a list of</span>
+<span class="sd">    6 floats. It stores the three x-y pairs that define the triangle. The</span>
+<span class="sd">    object uses `fillColor` for the interior of the triangle and `lineColor`</span>
+<span class="sd">    for its borders.&quot;&quot;&quot;</span>
+
+    <span class="c"># Kivy Property: requires manual documentation due to no docstring</span>
+    <span class="c"># List of floats of length 6 representing a sequence of x-y pairs.</span>
+    <span class="n">points</span> <span class="o">=</span> <span class="n">ListProperty</span><span class="p">([</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">6</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">keywords</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;**Constructor**: creates a new triangle object.</span>
+
+<span class="sd">            :param keywords: diction of keyword arguments</span>
+
+<span class="sd">        To use the constructor for this class, provide it with</span>
+<span class="sd">        a list of keyword arguments that initialize various attributes.</span>
+<span class="sd">        For example, to intialize a triangle with the points (0,0),</span>
+<span class="sd">        (0,4), (4,2) use the constructor call:</span>
+
+<span class="sd">            graphicsTriangle(xyPoints=[0,0,0,4,4,2])</span>
+
+<span class="sd">        This class supports the same keywords as `graphicsObject`. In</span>
+<span class="sd">        addition, it supports the keywords `points` for the attribute</span>
+<span class="sd">        of the same name. The attribute size and pos are redundant in </span>
+<span class="sd">        objects for this class. They are computer automatically from </span>
+<span class="sd">        `points`.&quot;&quot;&quot;</span>
+
+        <span class="c"># Now ready to initialize</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">graphicsTriangle</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">keywords</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s">&#39;points&#39;</span> <span class="ow">in</span> <span class="n">keywords</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">points</span> <span class="o">=</span> <span class="n">keywords</span><span class="p">[</span><span class="s">&#39;points&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">points</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="n">points</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_resize</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_resize</span><span class="p">()</span>
+    
+    <span class="c"># Compute the size and pos from the list of points</span>
+    <span class="c"># Also does invariant checking on the point list.</span>
+    <span class="k">def</span> <span class="nf">_resize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">instance</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">value</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="n">mxx</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="n">mxy</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="n">mnx</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="n">mny</span> <span class="o">=</span> <span class="bp">None</span>
+        
+        <span class="n">xpos</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="p">)</span> <span class="o">==</span> <span class="mi">6</span><span class="p">,</span> <span class="sb">`p`</span><span class="o">+</span><span class="s">&#39; does not exactly 3 coordinates&#39;</span>
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="nb">type</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span><span class="nb">float</span><span class="p">),</span> <span class="sb">`p`</span><span class="o">+</span><span class="s">&#39; is not a number&#39;</span>
+            <span class="k">if</span> <span class="n">xpos</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">mxx</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">mxx</span> <span class="o">&lt;</span> <span class="n">p</span><span class="p">:</span>
+                    <span class="n">mxx</span> <span class="o">=</span> <span class="n">p</span>
+                <span class="k">if</span> <span class="n">mnx</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">mnx</span> <span class="o">&gt;</span> <span class="n">p</span><span class="p">:</span>
+                    <span class="n">mnx</span> <span class="o">=</span> <span class="n">p</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">mxy</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">mxy</span> <span class="o">&lt;</span> <span class="n">p</span><span class="p">:</span>
+                    <span class="n">mxy</span> <span class="o">=</span> <span class="n">p</span>
+                <span class="k">if</span> <span class="n">mny</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">mny</span> <span class="o">&gt;</span> <span class="n">p</span><span class="p">:</span>
+                    <span class="n">mny</span> <span class="o">=</span> <span class="n">p</span>
+            <span class="n">xpos</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">xpos</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="p">(</span><span class="n">mxx</span><span class="o">-</span><span class="n">mnx</span><span class="p">,</span><span class="n">mxy</span><span class="o">-</span><span class="n">mny</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pos</span> <span class="o">=</span> <span class="p">(</span><span class="n">mnx</span><span class="p">,</span><span class="n">mny</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="graphicsImage"><a class="viewcode-back" href="../gimage.html#breakoutGraphics.graphicsImage">[docs]</a><span class="k">class</span> <span class="nc">graphicsImage</span><span class="p">(</span><span class="n">graphicsObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Instance represents a rectangular image in the `GameView`</span>
+
+<span class="sd">    The image is given by a JPEG, PNG, or GIF file whose name is </span>
+<span class="sd">    stored in the attribute `imageSource`. Image files should be stored </span>
+<span class="sd">    in the **Images** directory, so that Kivy can find them without the</span>
+<span class="sd">    complete path name. In this graphics object, the `lineColor` and </span>
+<span class="sd">    `fillColor` attributes are ignored. The image is displayed as a </span>
+<span class="sd">    recntangle whose bottom left corner is defined by attribute `pos` </span>
+<span class="sd">    and whose width and height are defined by the atribute `size`. If</span>
+<span class="sd">    the `size` attribute does not agree with the actual size of the </span>
+<span class="sd">    image, the image is scaled to fit.&quot;&quot;&quot;</span>
+
+    <span class="n">imageSource</span> <span class="o">=</span> <span class="n">StringProperty</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">keywords</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;**Constructor**: creates a new image.</span>
+<span class="sd">        </span>
+<span class="sd">            :param keywords: dictionary of keyword arguments </span>
+<span class="sd">            **Precondition**: See below.</span>
+<span class="sd">        </span>
+<span class="sd">        To use the constructor for this class, you should provide</span>
+<span class="sd">        it with a list of keyword arguments that initialize various</span>
+<span class="sd">        attributes. For example, to create an image from the file</span>
+<span class="sd">        &quot;gollum.png&quot;, use the constructor call</span>
+<span class="sd">        </span>
+<span class="sd">            graphicsImage(imageSource=&#39;gollum.png&#39;)</span>
+<span class="sd">        </span>
+<span class="sd">        This class supports the same keywords as `graphicsObject`.  In</span>
+<span class="sd">        addition, it supports the keyword `imageSource` for the attribute</span>
+<span class="sd">        of the same name.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">graphicsImage</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">keywords</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s">&#39;imageSource&#39;</span> <span class="ow">in</span> <span class="n">keywords</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">imageSource</span> <span class="o">=</span> <span class="n">keywords</span><span class="p">[</span><span class="s">&#39;imageSource&#39;</span><span class="p">]</span>
+
+</div>
+<div class="viewcode-block" id="graphicsLabel"><a class="viewcode-back" href="../glabel.html#breakoutGraphics.graphicsLabel">[docs]</a><span class="k">class</span> <span class="nc">graphicsLabel</span><span class="p">(</span><span class="n">graphicsObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Instance represents an (uneditable) text label in `GameView`</span>
+
+<span class="sd">    The attribute `text` defines the content of this image. Uses of </span>
+<span class="sd">    the escape character &#39;\\n&#39; will result in a label that spans</span>
+<span class="sd">    multiple lines. The label includes both the text, and a rectangular</span>
+<span class="sd">    backdrop with the bottom left corner of this recntagle is `fillColor`,</span>
+<span class="sd">    while `lineColor` is the color of the text.</span>
+
+<span class="sd">    The text itself is aligned within this rectangle according to the</span>
+<span class="sd">    attributes `horizontalAlign` and `verticalAlign`.  See the </span>
+<span class="sd">    documentation of these attributes for how alignment works.  </span>
+<span class="sd">    There are also attributes to change the point size, font style, and</span>
+<span class="sd">    font name of the text. The `size` attribute of this label will grow</span>
+<span class="sd">    to ensure that the text will fit in the rectangle, no matter the font</span>
+<span class="sd">    or point size.</span>
+<span class="sd">    </span>
+<span class="sd">    To change the font, you need a .ttf (TrueType Font) file in the</span>
+<span class="sd">    Fonts folder; refer to the font by filename, including the .ttf.</span>
+<span class="sd">    If you give no name, it will use the default Kivy font.  The</span>
+<span class="sd">    `bold` attribute only works for the default Kivy font; for other</span>
+<span class="sd">    fonts you will need the .ttf file for the bold version of that</span>
+<span class="sd">    font.  See `ComicSans.ttf` and `ComicSansBold.ttf` for an example.&quot;&quot;&quot;</span>
+
+    <span class="c"># Fields - see the associated property</span>
+    <span class="n">_valign</span> <span class="o">=</span> <span class="s">&#39;bottom&#39;</span>
+    <span class="n">_halign</span> <span class="o">=</span> <span class="s">&#39;left&#39;</span>
+    
+    <span class="c"># Override the fill color</span>
+    <span class="n">_fillcolor</span> <span class="o">=</span> <span class="n">colormodel</span><span class="o">.</span><span class="n">RGB</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>  <span class="c"># fill color field</span>
+    <span class="n">_kivy_fill_color</span> <span class="o">=</span> <span class="n">ListProperty</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span> <span class="c"># Kivy representation of fill color</span>
+
+    <span class="c"># Interior Kivy label.  Hidden field with no property.</span>
+    <span class="n">_label</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">font_size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Size of the text font in points.</span>
+<span class="sd">        </span>
+<span class="sd">        **Invariant**: A positive number (int or float)&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label</span><span class="o">.</span><span class="n">font_size</span>
+
+    <span class="nd">@font_size.setter</span>
+<div class="viewcode-block" id="graphicsLabel.font_size"><a class="viewcode-back" href="../glabel.html#breakoutGraphics.graphicsLabel.font_size">[docs]</a>    <span class="k">def</span> <span class="nf">font_size</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">value</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span><span class="nb">float</span><span class="p">),</span> <span class="sb">`value`</span><span class="o">+</span><span class="s">&#39; is not a number&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_label</span><span class="o">.</span><span class="n">font_size</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_label</span><span class="o">.</span><span class="n">texture_update</span><span class="p">()</span>
+</div>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">font_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;File name for the .ttf file to use as a font</span>
+<span class="sd">        </span>
+<span class="sd">        **Invariant**: string referring to a .ttf file in folder Fonts&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label</span><span class="o">.</span><span class="n">font_name</span>
+
+    <span class="nd">@font_name.setter</span>
+<div class="viewcode-block" id="graphicsLabel.font_name"><a class="viewcode-back" href="../glabel.html#breakoutGraphics.graphicsLabel.font_name">[docs]</a>    <span class="k">def</span> <span class="nf">font_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">value</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">==</span> <span class="nb">str</span><span class="p">,</span> <span class="sb">`value`</span><span class="o">+</span><span class="s">&#39; is not a string&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_label</span><span class="o">.</span><span class="n">font_name</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_label</span><span class="o">.</span><span class="n">texture_update</span><span class="p">()</span>
+</div>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">bold</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Boolean indicating whether or not the text should be bold.</span>
+<span class="sd">        </span>
+<span class="sd">        Only works on the default Kivy font.  Does not work on custom</span>
+<span class="sd">        .ttf files.  In that case, you need the bold version of the</span>
+<span class="sd">        .ttf file.  See `ComicSans.ttf` and `ComicSansBold.ttf` for</span>
+<span class="sd">        an example.</span>
+<span class="sd">        </span>
+<span class="sd">        **Invariant**: boolean&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label</span><span class="o">.</span><span class="n">bold</span>
+
+    <span class="nd">@bold.setter</span>
+<div class="viewcode-block" id="graphicsLabel.bold"><a class="viewcode-back" href="../glabel.html#breakoutGraphics.graphicsLabel.bold">[docs]</a>    <span class="k">def</span> <span class="nf">bold</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">value</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">==</span> <span class="nb">bool</span><span class="p">,</span> <span class="sb">`value`</span><span class="o">+</span><span class="s">&#39; is not a bool&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_label</span><span class="o">.</span><span class="n">bold</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_label</span><span class="o">.</span><span class="n">texture_update</span><span class="p">()</span>
+</div>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">text</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Text for this label.</span>
+<span class="sd">        </span>
+<span class="sd">        The text in the label is displayed as a single line, or broken</span>
+<span class="sd">        up into multiple lines in the presence of the escape character</span>
+<span class="sd">        &#39;\\n&#39;. The `size` attribute of this label grows to make sure</span>
+<span class="sd">        that the entire text fits inside of the rectangle.</span>
+<span class="sd">        </span>
+<span class="sd">        **Invariant**: must be a string&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label</span><span class="o">.</span><span class="n">text</span>
+    
+    <span class="nd">@text.setter</span>
+<div class="viewcode-block" id="graphicsLabel.text"><a class="viewcode-back" href="../glabel.html#breakoutGraphics.graphicsLabel.text">[docs]</a>    <span class="k">def</span> <span class="nf">text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">value</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">==</span> <span class="nb">str</span><span class="p">,</span> <span class="sb">`value`</span><span class="o">+</span><span class="s">&#39; is not a string&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_label</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_label</span><span class="o">.</span><span class="n">texture_update</span><span class="p">()</span>
+</div>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">halign</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Horizontal alignment for this label.</span>
+<span class="sd">        </span>
+<span class="sd">        The text is anchored inside of the label rectangle on either the</span>
+<span class="sd">        left, the right or the center.  This means that as the size of</span>
+<span class="sd">        the label increases, the text will still stay rooted at that</span>
+<span class="sd">        anchor.</span>
+<span class="sd">        </span>
+<span class="sd">        **Invariant**: one of &#39;left&#39;, &#39;right&#39;, or &#39;center&#39;&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_halign</span>
+    
+    <span class="nd">@halign.setter</span>
+<div class="viewcode-block" id="graphicsLabel.halign"><a class="viewcode-back" href="../glabel.html#breakoutGraphics.graphicsLabel.halign">[docs]</a>    <span class="k">def</span> <span class="nf">halign</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">value</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="n">value</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&#39;left&#39;</span><span class="p">,</span><span class="s">&#39;right&#39;</span><span class="p">,</span><span class="s">&#39;center&#39;</span><span class="p">),</span> <span class="sb">`value`</span><span class="o">+</span><span class="s">&#39; is not a valid horizontal alignment&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_halign</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_label</span><span class="o">.</span><span class="n">halign</span> <span class="o">=</span> <span class="n">value</span>
+</div>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">valign</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Vertical alignment for this label.</span>
+<span class="sd">        </span>
+<span class="sd">        The text is anchored inside of the label rectangle at either the</span>
+<span class="sd">        top, the bottom or the middle.  This means that as the size of</span>
+<span class="sd">        the label increases, the text will still stay rooted at that</span>
+<span class="sd">        anchor.</span>
+<span class="sd">        </span>
+<span class="sd">        **Invariant**: one of &#39;top&#39;, &#39;bottom&#39;, or &#39;middle&#39;&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_valign</span>
+    
+    <span class="nd">@valign.setter</span>
+<div class="viewcode-block" id="graphicsLabel.valign"><a class="viewcode-back" href="../glabel.html#breakoutGraphics.graphicsLabel.valign">[docs]</a>    <span class="k">def</span> <span class="nf">valign</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">value</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="n">value</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&#39;top&#39;</span><span class="p">,</span><span class="s">&#39;middle&#39;</span><span class="p">,</span><span class="s">&#39;bottom&#39;</span><span class="p">),</span> <span class="sb">`value`</span><span class="o">+</span><span class="s">&#39; is not a valid vertical alignment&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_valign</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_label</span><span class="o">.</span><span class="n">valign</span> <span class="o">=</span> <span class="n">value</span>
+</div>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">linecolor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The text color for this label.</span>
+<span class="sd">        </span>
+<span class="sd">        Overrides `lineColor` property in `graphicsObject`</span>
+<span class="sd">            </span>
+<span class="sd">        **Invariant**: Must be a RGB object from module `colormodel`.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_linecolor</span>
+    
+    <span class="nd">@linecolor.setter</span>
+<div class="viewcode-block" id="graphicsLabel.linecolor"><a class="viewcode-back" href="../glabel.html#breakoutGraphics.graphicsLabel.linecolor">[docs]</a>    <span class="k">def</span> <span class="nf">linecolor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">value</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">==</span> <span class="n">colormodel</span><span class="o">.</span><span class="n">RGB</span><span class="p">,</span> <span class="sb">`value`</span><span class="o">+</span><span class="s">&#39; is not a valid color&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_linecolor</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_label</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">openGLColor</span><span class="p">()</span>
+    </div>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">keywords</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;**Constructor**: creates a new text label.</span>
+<span class="sd">        </span>
+<span class="sd">            :param keywords: dictionary of keyword arguments </span>
+<span class="sd">        </span>
+<span class="sd">        To use the constructor for this class, provide it with a </span>
+<span class="sd">        list of keyword arguments that initialize various attributes.</span>
+<span class="sd">        For example, to create a label containing the word &#39;Hello&#39;,</span>
+<span class="sd">        use the constructor call</span>
+<span class="sd">        </span>
+<span class="sd">            graphicsLabel(text=&#39;Hello&#39;)</span>
+<span class="sd">        </span>
+<span class="sd">        This class supports the same keywords as `graphicsObject`, </span>
+<span class="sd">        as well as additional attributes for the text properties (e.g.</span>
+<span class="sd">        font, size and name).&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_label</span> <span class="o">=</span> <span class="n">Label</span><span class="p">(</span><span class="o">**</span><span class="n">keywords</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_label</span><span class="o">.</span><span class="n">size_hint</span> <span class="o">=</span> <span class="p">(</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">graphicsLabel</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">keywords</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_widget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_label</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label</span><span class="o">.</span><span class="n">size</span>
+
+        <span class="k">if</span> <span class="s">&#39;halign&#39;</span> <span class="ow">in</span> <span class="n">keywords</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">halign</span> <span class="o">=</span> <span class="n">keywords</span><span class="p">[</span><span class="s">&#39;halign&#39;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="s">&#39;valign&#39;</span> <span class="ow">in</span> <span class="n">keywords</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">valign</span> <span class="o">=</span> <span class="n">keywords</span><span class="p">[</span><span class="s">&#39;valign&#39;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="s">&#39;linecolor&#39;</span> <span class="ow">in</span> <span class="n">keywords</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">linecolor</span> <span class="o">=</span> <span class="n">colormodel</span><span class="o">.</span><span class="n">BLACK</span>
+            
+        <span class="bp">self</span><span class="o">.</span><span class="n">_label</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="n">texture_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_resize</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_resize</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_resize</span><span class="p">()</span>
+    
+    <span class="c"># Compute the size and pos from the text texture</span>
+    <span class="c"># Also align the internal label in the rectangle</span>
+    <span class="k">def</span> <span class="nf">_resize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">instance</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">value</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_label</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label</span><span class="o">.</span><span class="n">texture_size</span>
+        
+        <span class="c"># Resize the outside if necessary</span>
+        <span class="n">width</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">_label</span><span class="o">.</span><span class="n">width</span><span class="p">)</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">_label</span><span class="o">.</span><span class="n">height</span><span class="p">)</span>
+        
+        <span class="c"># Reset to horizontal anchor position.</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_halign</span> <span class="o">==</span> <span class="s">&#39;left&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">width</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_halign</span> <span class="o">==</span> <span class="s">&#39;center&#39;</span><span class="p">:</span>
+            <span class="n">cx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">center_x</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">width</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">center_x</span> <span class="o">=</span> <span class="n">cx</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">right</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">right</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">width</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">right</span> <span class="o">=</span> <span class="n">right</span>            
+
+        <span class="c"># Reset to vertical anchor position.</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_valign</span> <span class="o">==</span> <span class="s">&#39;top&#39;</span><span class="p">:</span>
+            <span class="n">top</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="n">height</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">=</span> <span class="n">top</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_valign</span> <span class="o">==</span> <span class="s">&#39;middle&#39;</span><span class="p">:</span>
+            <span class="n">cy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">center_y</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="n">height</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">center_y</span> <span class="o">=</span> <span class="n">cy</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="n">height</span>
+        
+        <span class="c"># Internal Horizontal placement</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_halign</span> <span class="o">==</span> <span class="s">&#39;left&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_label</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_halign</span> <span class="o">==</span> <span class="s">&#39;center&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_label</span><span class="o">.</span><span class="n">center_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">center_x</span>
+        <span class="k">else</span><span class="p">:</span> <span class="c"># &#39;ightr&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_label</span><span class="o">.</span><span class="n">right</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">right</span>
+        
+        <span class="c"># Internal Vertical placement</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_valign</span> <span class="o">==</span> <span class="s">&#39;top&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_label</span><span class="o">.</span><span class="n">top</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_valign</span> <span class="o">==</span> <span class="s">&#39;middle&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_label</span><span class="o">.</span><span class="n">center_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">center_y</span>
+        <span class="k">else</span><span class="p">:</span> <span class="c"># &#39;bottom&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_label</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span>
+
+</div>
+<div class="viewcode-block" id="graphicsRectangle"><a class="viewcode-back" href="../grectangle.html#breakoutGraphics.graphicsRectangle">[docs]</a><span class="k">class</span> <span class="nc">graphicsRectangle</span><span class="p">(</span><span class="n">graphicsObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Instance represents a solid rectangle in `GameView`</span>
+<span class="sd">    </span>
+<span class="sd">    The bottom left corner of the rectangle is given by `pos` and</span>
+<span class="sd">    the width and height are given by `size`.  The interior (fill)</span>
+<span class="sd">    color of this rectangle is `fillColor`, while `lineColor`</span>
+<span class="sd">    is the color of the border.</span>
+<span class="sd">    </span>
+<span class="sd">    For more fine-grained rectangle placement, you should make</span>
+<span class="sd">    use of the attributes `center`, `center_x`, `center_y`, `right`,</span>
+<span class="sd">    and `top`, all inherited from `graphicsObject`.  See that class</span>
+<span class="sd">    for more.&quot;&quot;&quot;</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">keywords</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;**Constructor**: creates a new rectangle.</span>
+<span class="sd">        </span>
+<span class="sd">            :param keywords: dictionary of keyword arguments </span>
+<span class="sd">        </span>
+<span class="sd">        To use the constructor for this class, provide it with a </span>
+<span class="sd">        list of keyword arguments that initialize various attributes. </span>
+<span class="sd">        For example, to create a rectangle with corners points (0,0),</span>
+<span class="sd">        (0,2), (1,2), and (1,0), use the constructor call</span>
+<span class="sd">        </span>
+<span class="sd">            graphicsRectangle(pos=(0,0),size=(1,2))</span>
+<span class="sd">        </span>
+<span class="sd">        This class supports the same keywords as `graphicsObject`.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">graphicsRectangle</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">keywords</span><span class="p">)</span>
+        
+        </div>
+<div class="viewcode-block" id="graphicsEllipse"><a class="viewcode-back" href="../gellipse.html#breakoutGraphics.graphicsEllipse">[docs]</a><span class="k">class</span> <span class="nc">graphicsEllipse</span><span class="p">(</span><span class="n">graphicsObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Instance represents a solid ellipse in `GameView`</span>
+<span class="sd">    </span>
+<span class="sd">    The ellipse is the largest one that can be drawn inside of a</span>
+<span class="sd">    rectangle whose bottom left corner is given by `pos` and</span>
+<span class="sd">    whose width and height are given by `size`.  The interior (fill)</span>
+<span class="sd">    color of this rectangle is `fillColor`, while `lineColor`</span>
+<span class="sd">    is the color of the border.</span>
+<span class="sd">    </span>
+<span class="sd">    For more fine-grained rectangle placement, you should make</span>
+<span class="sd">    use of the attributes `center`, `center_x`, `center_y`, `right`,</span>
+<span class="sd">    and `top`, all inherited from `graphicsObject`.  See that class</span>
+<span class="sd">    for more.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">keywords</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;**Constructor**: creates a new ellipse.</span>
+<span class="sd">        </span>
+<span class="sd">            :param keywords: dictionary of keyword arguments </span>
+<span class="sd">        </span>
+<span class="sd">        To use the constructor for this class, provide it with a </span>
+<span class="sd">        list of keyword arguments that initialize various attributes. </span>
+<span class="sd">        For example, to create an circle centered at (0,0) with radius</span>
+<span class="sd">        10, use the constructor call</span>
+<span class="sd">        </span>
+<span class="sd">            graphicsEllipse(center=(0,0),size=(20,20))</span>
+<span class="sd">        </span>
+<span class="sd">        Note that we specify ellipse size by diameter, not radius</span>
+<span class="sd">        This class supports the same keywords as `graphicsObject`.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">graphicsEllipse</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">keywords</span><span class="p">)</span>
+        
+</div>
+<span class="k">class</span> <span class="nc">_ClockEvent</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Instances represent delayed graphics events.</span>
+<span class="sd">    </span>
+<span class="sd">    Internal class to make animation and pauses simpler.&quot;&quot;&quot;</span>
+    <span class="c"># Hidden Fields</span>
+    <span class="n">_parent</span> <span class="o">=</span> <span class="bp">None</span>    <span class="c"># The view to update when the event occurs</span>
+    <span class="n">_widget</span> <span class="o">=</span> <span class="bp">None</span>    <span class="c"># The widget to remove when the event occurs</span>
+    <span class="n">_callback</span> <span class="o">=</span> <span class="bp">None</span>  <span class="c"># The function to call when the event occurs.</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">parent</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">widget</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">callback</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;**Constructor**: Creates a new clock delay event.</span>
+<span class="sd">        </span>
+<span class="sd">            :param parentObject: The parent object</span>
+<span class="sd">            **Precondition**: A `GameView` or `GameController`</span>
+<span class="sd">            </span>
+<span class="sd">            :param widget: The widget to remove when the even occurs</span>
+<span class="sd">            **Precondition**: A `graphicsObject` or None if parentObject </span>
+<span class="sd">                             is a `GameController`</span>
+
+<span class="sd">            :param callback: The function to call when the event occurs.</span>
+<span class="sd">            **Precondition**: A function with no (additional) arguments</span>
+<span class="sd">        </span>
+<span class="sd">        The delay interval is set by the parent object.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_parent</span> <span class="o">=</span> <span class="n">parent</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_widget</span> <span class="o">=</span> <span class="n">widget</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_callback</span> <span class="o">=</span> <span class="n">callback</span>
+    
+    <span class="k">def</span> <span class="nf">awaken</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">dt</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Respond to the delayed event.</span>
+<span class="sd">        </span>
+<span class="sd">        Delete the widget if it is there. Call the callback if it exists.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parent</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_widget</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_parent</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_widget</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_parent</span><span class="o">.</span><span class="n">_events</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_callback</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_widget</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_callback</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_callback</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_widget</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="GameView"><a class="viewcode-back" href="../gameview.html#breakoutGraphics.GameView">[docs]</a><span class="k">class</span> <span class="nc">GameView</span><span class="p">(</span><span class="n">FloatLayout</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;The view class for a :doc:`GameController &lt;gamecontroller&gt;` application.</span>
+<span class="sd">    </span>
+<span class="sd">    You may need to access an instance of this class to add and/or remove</span>
+<span class="sd">    :doc:`graphicsObject &lt;gobject&gt;` instances.  However, you will never need to construct </span>
+<span class="sd">    one. You should only use the one provided in the `view` attribute of</span>
+<span class="sd">    :doc:`GameController &lt;gamecontroller&gt;`.  See :doc:`GameController &lt;gamecontroller&gt;` for more information.&quot;&quot;&quot;</span>
+    <span class="c"># Hidden Field.  Necessary to maintain strong references to delayed events.    </span>
+    <span class="n">_events</span> <span class="o">=</span> <span class="p">[]</span>
+    
+<div class="viewcode-block" id="GameView.add"><a class="viewcode-back" href="../gameview.html#breakoutGraphics.GameView.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">widget</span><span class="p">,</span><span class="n">timeout</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">callback</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Add a new `graphicsObject` to this view.</span>
+
+<span class="sd">            :param widget: widget to add</span>
+
+<span class="sd">            **Precondition**: an instance of `graphicsObject`</span>
+
+<span class="sd">            :param timeout: time to remove widget in seconds; never if 0</span>
+
+<span class="sd">            **Precondition**: a non-negative number (int or float)</span>
+<span class="sd">            </span>
+<span class="sd">            :param callback: function called after delay; ignored if `timeout` is 0.</span>
+
+<span class="sd">            **Precondition**: a function reference; must be a function that takes the widget as an argument</span>
+
+<span class="sd">        Objects are drawn &#39;bottom-up&#39;, with later objects drawn on top of</span>
+<span class="sd">        objects added earlier.  If you wish for an object to be in the</span>
+<span class="sd">        background, it must be added first.</span>
+<span class="sd">        </span>
+<span class="sd">        The `timeout` attribute is a simple way to provide a widget that quickly</span>
+<span class="sd">        flashes up on screen, though the `delay` method in `GameController` has </span>
+<span class="sd">        the same effect.&quot;&quot;&quot;</span>
+
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">widget</span><span class="p">,</span><span class="n">graphicsObject</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_widget</span><span class="p">(</span><span class="n">widget</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">timeout</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">timer</span> <span class="o">=</span> <span class="n">_ClockEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">widget</span><span class="p">,</span><span class="n">callback</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_events</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">timer</span><span class="p">)</span>
+            <span class="n">Clock</span><span class="o">.</span><span class="n">schedule_once</span><span class="p">(</span><span class="n">timer</span><span class="o">.</span><span class="n">awaken</span><span class="p">,</span> <span class="n">timeout</span><span class="p">)</span>
+    </div>
+<div class="viewcode-block" id="GameView.remove"><a class="viewcode-back" href="../gameview.html#breakoutGraphics.GameView.remove">[docs]</a>    <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">widget</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Removes the widget from this view.</span>
+<span class="sd">            </span>
+<span class="sd">            :param widget: widget to remove</span>
+
+<span class="sd">            **Precondition**: a `graphicsObject` stored in this view</span>
+<span class="sd">        </span>
+<span class="sd">        Manually removes a `graphicsObject` widget from this view. You</span>
+<span class="sd">        should call this method if the graphics object was added</span>
+<span class="sd">        with timeout 0; otherwise the application will automatically</span>
+<span class="sd">        remove the widget for you.</span>
+<span class="sd">        </span>
+<span class="sd">        This method does nothing if widget is not in this view.&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">remove_widget</span><span class="p">(</span><span class="n">widget</span><span class="p">)</span>
+
+</div></div>
+<div class="viewcode-block" id="GameController"><a class="viewcode-back" href="../gamecontroller.html#breakoutGraphics.GameController">[docs]</a><span class="k">class</span> <span class="nc">GameController</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Primary controller class for a simple game application.</span>
+<span class="sd">    </span>
+<span class="sd">    To create a game application, subclass this class. Make sure</span>
+<span class="sd">    to add a call to super to your constructor (should you choose</span>
+<span class="sd">    to override the constructor at all). To provide game functionality</span>
+<span class="sd">    you only need to override the following five methods:</span>
+<span class="sd">    </span>
+<span class="sd">        `initialize`: Called at the start of the game to initialize your</span>
+<span class="sd">        program.  It is preferable to put start-up code here rather than</span>
+<span class="sd">        in your constructor.</span>
+<span class="sd">        </span>
+<span class="sd">        `update`: Called every animation frame (60x a second). This is</span>
+<span class="sd">        where you add any game animation code.</span>
+<span class="sd">        </span>
+<span class="sd">        `on_touch_down`: Called whenever the user presses the mouse or</span>
+<span class="sd">        a finger (for a touch screen device).  </span>
+
+<span class="sd">        `on_touch_up`: Called whenever the user releases the mouse or</span>
+<span class="sd">        a finger (for a touch screen device).  Every touch_down event</span>
+<span class="sd">        has a corresponding touch_up event.</span>
+<span class="sd">        </span>
+<span class="sd">        `on_touch_move`: Called whenever the user moves the mouse or</span>
+<span class="sd">        a finger while it is still help down.  touch_move events are</span>
+<span class="sd">        optional for each press, while touch_down and touch_up are not.</span>
+<span class="sd">    </span>
+<span class="sd">    These are the only methods that you *must* implement.  In addition,</span>
+<span class="sd">    you should add whatever fields and/or helper methods are necessary</span>
+<span class="sd">    for your game.</span>
+<span class="sd">    </span>
+<span class="sd">    Except in very few instances you should never need to add properties</span>
+<span class="sd">    to a `GameController`.  As the controller, it manages all of the</span>
+<span class="sd">    objects in the game, and none of the other objects need to access</span>
+<span class="sd">    its fields.&quot;&quot;&quot;</span>
+
+    <span class="c"># Field for the view.  See associated property</span>
+    <span class="n">_view</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="c"># Hidden Field.  Necessary to maintain strong references to delayed events.    </span>
+    <span class="n">_events</span> <span class="o">=</span> <span class="p">[]</span>
+    
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="GameController.view"><a class="viewcode-back" href="../gamecontroller.html#breakoutGraphics.GameController.view">[docs]</a>    <span class="k">def</span> <span class="nf">view</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The Game view.</span>
+<span class="sd">        </span>
+<span class="sd">        This attribute is *immutable* in that you cannot delete it or</span>
+<span class="sd">        replace it by another view.  However, the view itself is not</span>
+<span class="sd">        immutable.  You are free to use the `add` and `remove` methods</span>
+<span class="sd">        in this attribute to add and remove graphics objects.&quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_view</span>
+    
+    <span class="c"># VISIBLE METHODS</span>
+    </div>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;**Constructor**: Creates a game with this controller&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_view</span> <span class="o">=</span> <span class="n">GameView</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_view</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="n">on_touch_down</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">on_touch_down</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_view</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="n">on_touch_move</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">on_touch_move</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_view</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="n">on_touch_up</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">on_touch_up</span><span class="p">)</span>
+        <span class="n">Clock</span><span class="o">.</span><span class="n">schedule_once</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_start_up</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+<div class="viewcode-block" id="GameController.delay"><a class="viewcode-back" href="../gamecontroller.html#breakoutGraphics.GameController.delay">[docs]</a>    <span class="k">def</span> <span class="nf">delay</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">callback</span><span class="p">,</span><span class="n">time</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Delay the execution of callback for time seconds.</span>
+<span class="sd">        </span>
+<span class="sd">            :param callback: function called after delay</span>
+
+<span class="sd">            **Precondition**: a function reference; must be a function with no additional arguments</span>
+
+<span class="sd">            :param time: time to wait in seconds before calling the function.</span>
+
+<span class="sd">            **Precondition**: a positive number (int or float)</span>
+<span class="sd">        </span>
+<span class="sd">        You may have multiple callbacks delayed at any given time.  However,</span>
+<span class="sd">        you be careful about called `delay` inside of callback functions already</span>
+<span class="sd">        delayed.  The result is similar to recursion in that it can run out</span>
+<span class="sd">        of memory if you do it too much.&quot;&quot;&quot;</span>
+
+        <span class="n">timer</span> <span class="o">=</span> <span class="n">_ClockEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="bp">None</span><span class="p">,</span><span class="n">callback</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_events</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">timer</span><span class="p">)</span>
+        <span class="n">Clock</span><span class="o">.</span><span class="n">schedule_once</span><span class="p">(</span><span class="n">timer</span><span class="o">.</span><span class="n">awaken</span><span class="p">,</span><span class="n">time</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="GameController.initialize"><a class="viewcode-back" href="../gamecontroller.html#breakoutGraphics.GameController.initialize">[docs]</a>    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Called to initialize the game features.</span>
+<span class="sd">        </span>
+<span class="sd">        This method is the preferred way to initialize the elements in your</span>
+<span class="sd">        game, rather than overriding your constructor.  Because of the way</span>
+<span class="sd">        graphical applications work, you cannot guarantee that the view window</span>
+<span class="sd">        is sized properly when you are still inside of the constructor.  This</span>
+<span class="sd">        method is called later, when we can guarantee that the window and</span>
+<span class="sd">        other graphics elements have the right size.</span>
+<span class="sd">        </span>
+<span class="sd">        *Override this method to provide code specific to your game.*&quot;&quot;&quot;</span>
+
+        <span class="k">pass</span>
+</div>
+<div class="viewcode-block" id="GameController.update"><a class="viewcode-back" href="../gamecontroller.html#breakoutGraphics.GameController.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">dt</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Called every animation frame.</span>
+<span class="sd">        </span>
+<span class="sd">            :param dt: time in seconds since last update</span>
+
+<span class="sd">            **Precondition**: a number (int or float)</span>
+<span class="sd">        </span>
+<span class="sd">        This method is called 60x a second to provide on-screen animation.</span>
+<span class="sd">        Think of it as the body of the loop.  It is best to have fields</span>
+<span class="sd">        that represent the current animation state so that you know where</span>
+<span class="sd">        you are in the animation.</span>
+<span class="sd">        </span>
+<span class="sd">        *Override this method to provide code specific to your game.*&quot;&quot;&quot;</span>
+
+        <span class="k">pass</span>
+    </div>
+<div class="viewcode-block" id="GameController.on_touch_down"><a class="viewcode-back" href="../gamecontroller.html#breakoutGraphics.GameController.on_touch_down">[docs]</a>    <span class="k">def</span> <span class="nf">on_touch_down</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">view</span><span class="p">,</span><span class="n">touch</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Called when the user presses the mouse or a finger (on touch screens)</span>
+<span class="sd">        </span>
+<span class="sd">            :param view: view receiving touch event</span>
+
+<span class="sd">            **Precondition**: the `GameView` of this `GameController`</span>
+<span class="sd">            </span>
+<span class="sd">            :param touch: touch event information</span>
+
+<span class="sd">            **Precondition**: a Kivy `MotionEvent`_ object</span>
+<span class="sd">            </span>
+<span class="sd">        This method responds to a touch_down event.  If you want the user to</span>
+<span class="sd">        &#39;click to continue&#39;, or if you want to control a paddle on screen,</span>
+<span class="sd">        this is the primary method for responding to those controls.  Every</span>
+<span class="sd">        touch_down event is followed by a touch_up event.</span>
+
+<span class="sd">        *Override this method to provide code specific to your game.*&quot;&quot;&quot;</span>     
+
+        <span class="k">pass</span>
+    </div>
+<div class="viewcode-block" id="GameController.on_touch_move"><a class="viewcode-back" href="../gamecontroller.html#breakoutGraphics.GameController.on_touch_move">[docs]</a>    <span class="k">def</span> <span class="nf">on_touch_move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">view</span><span class="p">,</span><span class="n">touch</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Called when the user moves the mouse or a finger (on touch screens)</span>
+<span class="sd">        </span>
+<span class="sd">            :param view: view receiving touch event</span>
+
+<span class="sd">            **Precondition**: the `GameView` of this `GameController`</span>
+<span class="sd">            </span>
+<span class="sd">            :param touch: touch event information</span>
+
+<span class="sd">            **Precondition**: a Kivy `MotionEvent`_ object</span>
+
+<span class="sd">        This method responds to a touch_move event. Touch moves are optional</span>
+<span class="sd">        events and do not always need to be processed.  However, they are important</span>
+<span class="sd">        if you want the touch to move a graphics object on screen, such as a paddle.</span>
+
+<span class="sd">        *Override this method to provide code specific to your game.*&quot;&quot;&quot;</span>   
+
+        <span class="k">pass</span>
+</div>
+<div class="viewcode-block" id="GameController.on_touch_up"><a class="viewcode-back" href="../gamecontroller.html#breakoutGraphics.GameController.on_touch_up">[docs]</a>    <span class="k">def</span> <span class="nf">on_touch_up</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">view</span><span class="p">,</span><span class="n">touch</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Called when the user releases the mouse or a finger (on touch screens)</span>
+<span class="sd">        </span>
+<span class="sd">            :param view: view receiving touch event</span>
+
+<span class="sd">            **Precondition**: the `GameView` of this `GameController`</span>
+<span class="sd">            </span>
+<span class="sd">            :param touch: touch event information</span>
+
+<span class="sd">            **Precondition**: a Kivy `MotionEvent`_ object</span>
+<span class="sd">        </span>
+<span class="sd">        This method responds to a touch_up event. As every touch_down event has</span>
+<span class="sd">        a corresponding touch_up event, this lets you know when the mouse or finger</span>
+<span class="sd">        has been released. At this point you should reset whatever state fields</span>
+<span class="sd">        you had following the touch, as appropriate.</span>
+
+<span class="sd">        *Override this method to provide code specific to your game.*&quot;&quot;&quot;</span>     
+
+        <span class="k">pass</span>
+
+
+    <span class="c"># Hidden helper methods</span></div>
+    <span class="k">def</span> <span class="nf">_start_up</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">dt</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialize the game and start up the animation frame.</span>
+
+<span class="sd">        Calls `initiatlize` as a helper, which does all the work.</span>
+<span class="sd">        Necessary as much of the size and position information in</span>
+<span class="sd">        the application is not available until the constructor is</span>
+<span class="sd">        finished.&quot;&quot;&quot;</span>
+
+        <span class="n">Clock</span><span class="o">.</span><span class="n">schedule_interval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">,</span><span class="mf">1.0</span><span class="o">/</span><span class="mf">60.0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initialize</span><span class="p">()</span>    </div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">Breakout 1.0.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Peter J. Mountanos.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.
+    </div>
+  </body>
+</html>

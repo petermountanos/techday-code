@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Class graphicsImage &mdash; Breakout 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Breakout 1.0.0 documentation" href="index.html" />
+    <link rel="up" title="Graphics Objects" href="graphics.html" />
+    <link rel="next" title="Class graphicsLabel" href="glabel.html" />
+    <link rel="prev" title="Class graphicsEllipse" href="gellipse.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="glabel.html" title="Class graphicsLabel"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="gellipse.html" title="Class graphicsEllipse"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Breakout 1.0.0 documentation</a> &raquo;</li>
+          <li><a href="graphics.html" accesskey="U">Graphics Objects</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="class-graphicsimage">
+<h1>Class graphicsImage<a class="headerlink" href="#class-graphicsimage" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="breakoutGraphics.graphicsImage">
+<em class="property">class </em><tt class="descclassname">breakoutGraphics.</tt><tt class="descname">graphicsImage</tt><big>(</big><em>**keywords</em><big>)</big><a class="reference internal" href="_modules/breakoutGraphics.html#graphicsImage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#breakoutGraphics.graphicsImage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance represents a rectangular image in the <cite>GameView</cite></p>
+<p>The image is given by a JPEG, PNG, or GIF file whose name is 
+stored in the attribute <cite>imageSource</cite>. Image files should be stored 
+in the <strong>Images</strong> directory, so that Kivy can find them without the
+complete path name. In this graphics object, the <cite>lineColor</cite> and 
+<cite>fillColor</cite> attributes are ignored. The image is displayed as a 
+recntangle whose bottom left corner is defined by attribute <cite>pos</cite> 
+and whose width and height are defined by the atribute <cite>size</cite>. If
+the <cite>size</cite> attribute does not agree with the actual size of the 
+image, the image is scaled to fit.</p>
+</dd></dl>
+
+<p>This class is a subclass of <a class="reference internal" href="gobject.html"><em>graphicsObject</em></a>, and inherits
+all of its attributes and methods.</p>
+<div class="section" id="attributes">
+<h2>Attributes<a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h2>
+<p>These attributes are in addition to those from <a class="reference internal" href="gobject.html"><em>graphicsObject</em></a>.</p>
+<dl class="attribute">
+<dt id="breakoutGraphics.graphicsImage.source">
+<tt class="descclassname">graphicsImage.</tt><tt class="descname">source</tt><a class="headerlink" href="#breakoutGraphics.graphicsImage.source" title="Permalink to this definition">¶</a></dt>
+<dd><p>File name of a source file for this image.</p>
+<blockquote>
+<div><strong>Invariant</strong>: Must be a string or <cite>None</cite>.  Default is <cite>None</cite>.</div></blockquote>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="breakoutGraphics.graphicsImage.fillcolor">
+<tt class="descclassname">graphicsImage.</tt><tt class="descname">fillcolor</tt><a class="headerlink" href="#breakoutGraphics.graphicsImage.fillcolor" title="Permalink to this definition">¶</a></dt>
+<dd><p>This attribute is ignored.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="breakoutGraphics.graphicsImage.linecolor">
+<tt class="descclassname">graphicsImage.</tt><tt class="descname">linecolor</tt><a class="headerlink" href="#breakoutGraphics.graphicsImage.linecolor" title="Permalink to this definition">¶</a></dt>
+<dd><p>This attribute is ignored.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Class graphicsImage</a><ul>
+<li><a class="reference internal" href="#attributes">Attributes</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="gellipse.html"
+                        title="previous chapter">Class graphicsEllipse</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="glabel.html"
+                        title="next chapter">Class graphicsLabel</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/gimage.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="glabel.html" title="Class graphicsLabel"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="gellipse.html" title="Class graphicsEllipse"
+             >previous</a> |</li>
+        <li><a href="index.html">Breakout 1.0.0 documentation</a> &raquo;</li>
+          <li><a href="graphics.html" >Graphics Objects</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Peter J. Mountanos.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.
+    </div>
+  </body>
+</html>

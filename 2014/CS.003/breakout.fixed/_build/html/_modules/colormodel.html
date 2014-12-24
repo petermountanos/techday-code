@@ -1,0 +1,271 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>colormodel &mdash; Breakout 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Breakout 1.0.0 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">Breakout 1.0.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for colormodel</h1><div class="highlight"><pre>
+<span class="c"># breakoutGraphics.py</span>
+<span class="c"># Wantagh techDay - CS.003 Lecture 3</span>
+<span class="c"># Created by:   Peter Mountanos</span>
+<span class="c"># Modified from: Walker White (Cornell University)</span>
+<span class="c"># Date Created:  11/19/13</span>
+<span class="c"># Last Modified: 11/20/13</span>
+
+<span class="sd">&quot;&quot;&quot;RGB class for Breakout, the project for Wantagh techDay, class CS.003</span>
+
+<span class="sd">The constants in this module are all defined in the RGB color space.&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">colorsys</span>
+
+<span class="c"># To handle round off error</span>
+<span class="n">_epsilon</span> <span class="o">=</span> <span class="mf">1e-13</span>
+
+<div class="viewcode-block" id="RGB"><a class="viewcode-back" href="../rgb.html#colormodel.RGB">[docs]</a><span class="k">class</span> <span class="nc">RGB</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;An instance is an RGB color value.&quot;&quot;&quot;</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">red</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The red channel.</span>
+<span class="sd">        </span>
+<span class="sd">        **Invariant**: value must be an int between 0 and 255, inclusive.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_red</span>
+       
+    <span class="nd">@red.setter</span>
+    <span class="k">def</span> <span class="nf">red</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">==</span> <span class="nb">int</span><span class="p">),</span> <span class="s">&quot;value </span><span class="si">%s</span><span class="s"> is not an int&quot;</span> <span class="o">%</span> <span class="sb">`value`</span>
+        <span class="k">assert</span> <span class="p">(</span><span class="n">value</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">value</span> <span class="o">&lt;=</span> <span class="mi">255</span><span class="p">),</span> <span class="s">&quot;value </span><span class="si">%s</span><span class="s"> is outside of range [0,255]&quot;</span> <span class="o">%</span> <span class="sb">`value`</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_red</span> <span class="o">=</span> <span class="n">value</span>
+       
+    <span class="nd">@red.deleter</span>
+<div class="viewcode-block" id="RGB.red"><a class="viewcode-back" href="../rgb.html#colormodel.RGB.red">[docs]</a>    <span class="k">def</span> <span class="nf">red</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_red</span> 
+    </div>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">green</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The green channel.</span>
+<span class="sd">        </span>
+<span class="sd">        **Invariant**: value must be an int between 0 and 255, inclusive.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_green</span>
+    
+    <span class="nd">@green.setter</span>
+    <span class="k">def</span> <span class="nf">green</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">==</span> <span class="nb">int</span><span class="p">),</span> <span class="s">&quot;value </span><span class="si">%s</span><span class="s"> is not an int&quot;</span> <span class="o">%</span> <span class="sb">`value`</span>
+        <span class="k">assert</span> <span class="p">(</span><span class="n">value</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">value</span> <span class="o">&lt;=</span> <span class="mi">255</span><span class="p">),</span> <span class="s">&quot;value </span><span class="si">%s</span><span class="s"> is outside of range [0,255]&quot;</span> <span class="o">%</span> <span class="sb">`value`</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_green</span> <span class="o">=</span> <span class="n">value</span>
+        
+    <span class="nd">@green.deleter</span>
+<div class="viewcode-block" id="RGB.green"><a class="viewcode-back" href="../rgb.html#colormodel.RGB.green">[docs]</a>    <span class="k">def</span> <span class="nf">green</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_green</span>     
+    </div>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">blue</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The blue channel.</span>
+<span class="sd">        </span>
+<span class="sd">        **Invariant**: value must be an int between 0 and 255, inclusive.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_blue</span>
+    
+    <span class="nd">@blue.setter</span>
+    <span class="k">def</span> <span class="nf">blue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">==</span> <span class="nb">int</span><span class="p">),</span> <span class="s">&quot;value </span><span class="si">%s</span><span class="s"> is not an int&quot;</span> <span class="o">%</span> <span class="sb">`value`</span>
+        <span class="k">assert</span> <span class="p">(</span><span class="n">value</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">value</span> <span class="o">&lt;=</span> <span class="mi">255</span><span class="p">),</span> <span class="s">&quot;value </span><span class="si">%s</span><span class="s"> is outside of range [0,255]&quot;</span> <span class="o">%</span> <span class="sb">`value`</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_blue</span> <span class="o">=</span> <span class="n">value</span>
+        
+    <span class="nd">@blue.deleter</span>
+<div class="viewcode-block" id="RGB.blue"><a class="viewcode-back" href="../rgb.html#colormodel.RGB.blue">[docs]</a>    <span class="k">def</span> <span class="nf">blue</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_blue</span>     
+ </div>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">alpha</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The alpha channel.</span>
+<span class="sd">        </span>
+<span class="sd">        Used for transparency effects (but not in this course).</span>
+<span class="sd">        </span>
+<span class="sd">        **Invariant**: value must be an int between 0 and 255, inclusive.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_alpha</span>
+        
+    <span class="nd">@alpha.setter</span>
+    <span class="k">def</span> <span class="nf">alpha</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">==</span> <span class="nb">int</span><span class="p">),</span> <span class="s">&quot;value </span><span class="si">%s</span><span class="s"> is not an int&quot;</span> <span class="o">%</span> <span class="sb">`value`</span>
+        <span class="k">assert</span> <span class="p">(</span><span class="n">value</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">value</span> <span class="o">&lt;=</span> <span class="mi">255</span><span class="p">),</span> <span class="s">&quot;value </span><span class="si">%s</span><span class="s"> is outside of range [0,255]&quot;</span> <span class="o">%</span> <span class="sb">`value`</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_alpha</span> <span class="o">=</span> <span class="n">value</span>
+            
+    <span class="nd">@alpha.deleter</span>
+<div class="viewcode-block" id="RGB.alpha"><a class="viewcode-back" href="../rgb.html#colormodel.RGB.alpha">[docs]</a>    <span class="k">def</span> <span class="nf">alpha</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_alpha</span>     
+
+    <span class="c"># METHODS</span>
+    </div>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mi">255</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;**Constructor**: creates a new RGB value (r,g,b,a).</span>
+<span class="sd">        </span>
+<span class="sd">            :param r: initial red value</span>
+<span class="sd">            Precondition: int between 0 and 255, inclusive.</span>
+<span class="sd">        </span>
+<span class="sd">            :param g: initial green value</span>
+<span class="sd">            Precondition: int between 0 and 255, inclusive.</span>
+<span class="sd">        </span>
+<span class="sd">            :param b: initial blue value</span>
+<span class="sd">            Precondition: int between 0 and 255, inclusive.</span>
+<span class="sd">        </span>
+<span class="sd">            :param a: initial alpha value (default 255)</span>
+<span class="sd">            Precondition: int between 0 and 255, inclusive.</span>
+<span class="sd">        </span>
+<span class="sd">        The alpha channel is 255 by default, unless otherwise specified.&quot;&quot;&quot;</span>        
+        <span class="bp">self</span><span class="o">.</span><span class="n">red</span> <span class="o">=</span> <span class="n">r</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">green</span> <span class="o">=</span> <span class="n">g</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">blue</span> <span class="o">=</span> <span class="n">b</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="n">a</span>
+            
+    <span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">otherColor</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns: True if self and otherColor are equivalent RGB colors. &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">otherColor</span><span class="p">)</span> <span class="o">==</span> <span class="n">RGB</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">red</span> <span class="o">==</span> <span class="n">otherColor</span><span class="o">.</span><span class="n">red</span> <span class="ow">and</span> 
+                <span class="bp">self</span><span class="o">.</span><span class="n">green</span> <span class="o">==</span> <span class="n">otherColor</span><span class="o">.</span><span class="n">green</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">blue</span> <span class="o">==</span> <span class="n">otherColor</span><span class="o">.</span><span class="n">blue</span> <span class="ow">and</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">==</span> <span class="n">otherColor</span><span class="o">.</span><span class="n">alpha</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__ne__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">otherColor</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns: True if self and otherColor are not equivalent RGB colors. &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">otherColor</span><span class="p">)</span> <span class="o">!=</span> <span class="n">RGB</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">red</span> <span class="o">!=</span> <span class="n">otherColor</span><span class="o">.</span><span class="n">red</span> <span class="ow">or</span> 
+                <span class="bp">self</span><span class="o">.</span><span class="n">green</span> <span class="o">!=</span> <span class="n">otherColor</span><span class="o">.</span><span class="n">green</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">blue</span> <span class="o">!=</span> <span class="n">otherColor</span><span class="o">.</span><span class="n">blue</span> <span class="ow">or</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">!=</span> <span class="n">otherColor</span><span class="o">.</span><span class="n">alpha</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns: Readable string representation of this color. &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s">&quot;(&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">red</span><span class="p">)</span><span class="o">+</span><span class="s">&quot;,&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">green</span><span class="p">)</span><span class="o">+</span><span class="s">&quot;,&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">blue</span><span class="p">)</span><span class="o">+</span><span class="s">&quot;,&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="p">)</span><span class="o">+</span><span class="s">&quot;)&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns: Unambiguous String representation of this color. &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s">&quot;(red=&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">red</span><span class="p">)</span><span class="o">+</span><span class="s">&quot;,green=&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">green</span><span class="p">)</span><span class="o">+</span><span class="s">&quot;,blue=&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">blue</span><span class="p">)</span><span class="o">+</span><span class="s">&quot;,alpha=&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="p">)</span><span class="o">+</span><span class="s">&quot;)&quot;</span>
+
+<div class="viewcode-block" id="RGB.openGLColor"><a class="viewcode-back" href="../rgb.html#colormodel.RGB.openGLColor">[docs]</a>    <span class="k">def</span> <span class="nf">openGLColor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;**Returns**: 4 element list of the attributes in the range 0 to 1</span>
+<span class="sd">        </span>
+<span class="sd">        This is a conversion of this object into a format that can be used in</span>
+<span class="sd">        openGL graphics&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">red</span><span class="o">/</span><span class="mf">255.0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">green</span><span class="o">/</span><span class="mf">255.0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">blue</span><span class="o">/</span><span class="mf">255.0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="o">/</span><span class="mf">255.0</span><span class="p">]</span>
+
+<span class="c"># Color Constants</span>
+
+<span class="c">#: The color white in the default RGB space.</span></div></div>
+<span class="n">WHITE</span> <span class="o">=</span> <span class="n">RGB</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span>
+
+<span class="c">#: The color light gray in the default RGB space.</span>
+<span class="n">LIGHT_GRAY</span> <span class="o">=</span> <span class="n">RGB</span><span class="p">(</span><span class="mi">192</span><span class="p">,</span> <span class="mi">192</span><span class="p">,</span> <span class="mi">192</span><span class="p">)</span>
+
+<span class="c">#: The color gray in the default RGB space.</span>
+<span class="n">GRAY</span> <span class="o">=</span> <span class="n">RGB</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">)</span>
+
+<span class="c">#: The color dark gray in the default RGB space.</span>
+<span class="n">DARK_GRAY</span> <span class="o">=</span> <span class="n">RGB</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
+
+<span class="c">#: The color black in the default RGB space.</span>
+<span class="n">BLACK</span> <span class="o">=</span> <span class="n">RGB</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="c">#: The color red, in the default RGB space.</span>
+<span class="n">RED</span> <span class="o">=</span> <span class="n">RGB</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="c">#: The color pink in the default RGB space.</span>
+<span class="n">PINK</span> <span class="o">=</span> <span class="n">RGB</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">175</span><span class="p">,</span> <span class="mi">175</span><span class="p">)</span>
+
+<span class="c">#: The color orange in the default RGB space.</span>
+<span class="n">ORANGE</span> <span class="o">=</span> <span class="n">RGB</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="c">#: The color yellow in the default RGB space.</span>
+<span class="n">YELLOW</span> <span class="o">=</span> <span class="n">RGB</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="c">#: The color green in the default RGB space.</span>
+<span class="n">GREEN</span> <span class="o">=</span> <span class="n">RGB</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+
+<span class="c">#: The color magenta in the default RGB space.</span>
+<span class="n">MAGENTA</span> <span class="o">=</span> <span class="n">RGB</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span>
+
+<span class="c">#: The color cyan in the default RGB space.</span>
+<span class="n">CYAN</span> <span class="o">=</span> <span class="n">RGB</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span>
+
+<span class="c">#: The color blue in the default RGB space.</span>
+<span class="n">BLUE</span> <span class="o">=</span> <span class="n">RGB</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">Breakout 1.0.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Peter J. Mountanos.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.
+    </div>
+  </body>
+</html>

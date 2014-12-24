@@ -1,0 +1,156 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Game Classes &mdash; Breakout 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Breakout 1.0.0 documentation" href="index.html" />
+    <link rel="next" title="Class GameView" href="gameview.html" />
+    <link rel="prev" title="Documentation for CS.003: Breakout" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="gameview.html" title="Class GameView"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Documentation for CS.003: Breakout"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Breakout 1.0.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="game-classes">
+<h1>Game Classes<a class="headerlink" href="#game-classes" title="Permalink to this headline">¶</a></h1>
+<p>The game classes provide functionality for a simple animated
+game.  They provide the base classes for the view and primary
+controller.  The view, <a class="reference internal" href="gameview.html"><em>GameView</em></a>, does not ever need to be
+subclassed, and can be used as-is (as an attribute of
+<a class="reference internal" href="gamecontroller.html"><em>GameController</em></a>).</p>
+<p>On the other hand, <a class="reference internal" href="gamecontroller.html"><em>GameController</em></a> must be subclassed to
+provide your game functionality.  In particular, your
+subclass must override the following methods.</p>
+<blockquote>
+<div><p><cite>initialize</cite>: Called at the start of the game to initialize your
+program.  It is preferable to put start-up code here rather than
+in your constructor.</p>
+<p><cite>update</cite>: Called every animation frame (60x a second). This is
+where you add any game animation code.</p>
+<p><cite>on_touch_down</cite>: Called whenever the user presses the mouse or
+a finger (for a touch screen device).</p>
+<p><cite>on_touch_up</cite>: Called whenever the user releases the mouse or
+a finger (for a touch screen device).  Every touch_down event
+has a corresponding touch_up event.</p>
+<p><cite>on_touch_move</cite>: Called whenever the user moves the mouse or
+a finger while it is still help down.  touch_move events are
+optional for each press, while touch_down and touch_up are not.</p>
+</div></blockquote>
+<p>These classes are all provided by the <a class="reference internal" href="graphics.html"><em>breakoutGraphics</em></a> module.</p>
+<p>Contents:</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="gameview.html">Class GameView</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gameview.html#attributes">Attributes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gameview.html#methods">Methods</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gamecontroller.html">Class GameController</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gamecontroller.html#immutable-attributes">Immutable Attributes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gamecontroller.html#methods">Methods</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Documentation for CS.003: Breakout</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="gameview.html"
+                        title="next chapter">Class GameView</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/game.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="gameview.html" title="Class GameView"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Documentation for CS.003: Breakout"
+             >previous</a> |</li>
+        <li><a href="index.html">Breakout 1.0.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Peter J. Mountanos.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,185 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Class graphicsLine &mdash; Breakout 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Breakout 1.0.0 documentation" href="index.html" />
+    <link rel="up" title="Graphics Objects" href="graphics.html" />
+    <link rel="next" title="Class graphicsTriangle" href="gtriangle.html" />
+    <link rel="prev" title="Class graphicsObject" href="gobject.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="gtriangle.html" title="Class graphicsTriangle"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="gobject.html" title="Class graphicsObject"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Breakout 1.0.0 documentation</a> &raquo;</li>
+          <li><a href="graphics.html" accesskey="U">Graphics Objects</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="class-graphicsline">
+<h1>Class graphicsLine<a class="headerlink" href="#class-graphicsline" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="breakoutGraphics.graphicsLine">
+<em class="property">class </em><tt class="descclassname">breakoutGraphics.</tt><tt class="descname">graphicsLine</tt><big>(</big><em>**keywords</em><big>)</big><a class="reference internal" href="_modules/breakoutGraphics.html#graphicsLine"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#breakoutGraphics.graphicsLine" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance represent a sequence of line segments in the <cite>GameView</cite></p>
+<p>The line is defined by the <cite>points</cite> attribute which is an (even) sequence
+of alternating x and y values. When added to the graphics view, the view
+draws a sequence of line segments, starting from one x-y pair in <cite>points</cite>
+and going to the next x-y pair. If <cite>points</cite> has a length 2n, then the 
+result is n-1 line segments.</p>
+<p>The object uses the attribute <cite>lineColor</cite> to determine the color of the
+line. The attribute <cite>fillColor</cite> is unused (even though it is inherited
+from <cite>graphicsObject</cite>).</p>
+</dd></dl>
+
+<p>This class is a subclass of <a class="reference internal" href="gobject.html"><em>graphicsObject</em></a>, and inherits
+all of its attributes and methods.</p>
+<div class="section" id="attributes">
+<h2>Attributes<a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h2>
+<p>These attributes are in addition to those from <a class="reference internal" href="gobject.html"><em>graphicsObject</em></a>.</p>
+<dl class="attribute">
+<dt id="breakoutGraphics.graphicsLine.points">
+<tt class="descclassname">graphicsLine.</tt><tt class="descname">points</tt><a class="headerlink" href="#breakoutGraphics.graphicsLine.points" title="Permalink to this definition">¶</a></dt>
+<dd><p>Property that represents a list.</p>
+<p>Only lists are allowed. Tuple or any other classes are forbidden.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="breakoutGraphics.graphicsLine.fillcolor">
+<tt class="descclassname">graphicsLine.</tt><tt class="descname">fillcolor</tt><a class="headerlink" href="#breakoutGraphics.graphicsLine.fillcolor" title="Permalink to this definition">¶</a></dt>
+<dd><p>This attribute is ignored.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="breakoutGraphics.graphicsLine.height">
+<tt class="descclassname">graphicsLine.</tt><tt class="descname">height</tt><a class="headerlink" href="#breakoutGraphics.graphicsLine.height" title="Permalink to this definition">¶</a></dt>
+<dd><p>This attribute is computed automatically from the attribute <cite>points</cite></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="breakoutGraphics.graphicsLine.width">
+<tt class="descclassname">graphicsLine.</tt><tt class="descname">width</tt><a class="headerlink" href="#breakoutGraphics.graphicsLine.width" title="Permalink to this definition">¶</a></dt>
+<dd><p>This attribute is computed automatically from the attribute <cite>points</cite></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="breakoutGraphics.graphicsLine.x">
+<tt class="descclassname">graphicsLine.</tt><tt class="descname">x</tt><a class="headerlink" href="#breakoutGraphics.graphicsLine.x" title="Permalink to this definition">¶</a></dt>
+<dd><p>This attribute is computed automatically from the attribute <cite>points</cite></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="breakoutGraphics.graphicsLine.y">
+<tt class="descclassname">graphicsLine.</tt><tt class="descname">y</tt><a class="headerlink" href="#breakoutGraphics.graphicsLine.y" title="Permalink to this definition">¶</a></dt>
+<dd><p>This attribute is computed automatically from the attribute <cite>points</cite></p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Class graphicsLine</a><ul>
+<li><a class="reference internal" href="#attributes">Attributes</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="gobject.html"
+                        title="previous chapter">Class graphicsObject</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="gtriangle.html"
+                        title="next chapter">Class graphicsTriangle</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/gline.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="gtriangle.html" title="Class graphicsTriangle"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="gobject.html" title="Class graphicsObject"
+             >previous</a> |</li>
+        <li><a href="index.html">Breakout 1.0.0 documentation</a> &raquo;</li>
+          <li><a href="graphics.html" >Graphics Objects</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Peter J. Mountanos.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.
+    </div>
+  </body>
+</html>

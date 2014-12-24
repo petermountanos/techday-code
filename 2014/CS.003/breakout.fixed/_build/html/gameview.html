@@ -1,0 +1,209 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Class GameView &mdash; Breakout 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Breakout 1.0.0 documentation" href="index.html" />
+    <link rel="up" title="Game Classes" href="game.html" />
+    <link rel="next" title="Class GameController" href="gamecontroller.html" />
+    <link rel="prev" title="Game Classes" href="game.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="gamecontroller.html" title="Class GameController"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="game.html" title="Game Classes"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Breakout 1.0.0 documentation</a> &raquo;</li>
+          <li><a href="game.html" accesskey="U">Game Classes</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="class-gameview">
+<h1>Class GameView<a class="headerlink" href="#class-gameview" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="breakoutGraphics.GameView">
+<em class="property">class </em><tt class="descclassname">breakoutGraphics.</tt><tt class="descname">GameView</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/breakoutGraphics.html#GameView"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#breakoutGraphics.GameView" title="Permalink to this definition">¶</a></dt>
+<dd><p>The view class for a <a class="reference internal" href="gamecontroller.html"><em>GameController</em></a> application.</p>
+<p>You may need to access an instance of this class to add and/or remove
+<a class="reference internal" href="gobject.html"><em>graphicsObject</em></a> instances.  However, you will never need to construct 
+one. You should only use the one provided in the <cite>view</cite> attribute of
+<a class="reference internal" href="gamecontroller.html"><em>GameController</em></a>.  See <a class="reference internal" href="gamecontroller.html"><em>GameController</em></a> for more information.</p>
+</dd></dl>
+
+<div class="section" id="attributes">
+<h2>Attributes<a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h2>
+<p>There are no publically accessible attributes in <cite>GameView</cite>.</p>
+</div>
+<div class="section" id="methods">
+<h2>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="breakoutGraphics.GameView.add">
+<tt class="descclassname">GameView.</tt><tt class="descname">add</tt><big>(</big><em>widget</em>, <em>timeout=0</em>, <em>callback=None</em><big>)</big><a class="reference internal" href="_modules/breakoutGraphics.html#GameView.add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#breakoutGraphics.GameView.add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a new <cite>graphicsObject</cite> to this view.</p>
+<blockquote>
+<div><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">param widget:</th><td class="field-body">widget to add</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Precondition</strong>: an instance of <cite>graphicsObject</cite></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">param timeout:</th><td class="field-body">time to remove widget in seconds; never if 0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Precondition</strong>: a non-negative number (int or float)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">param callback:</th><td class="field-body">function called after delay; ignored if <cite>timeout</cite> is 0.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Precondition</strong>: a function reference; must be a function that takes the widget as an argument</p>
+</div></blockquote>
+<p>Objects are drawn &#8216;bottom-up&#8217;, with later objects drawn on top of
+objects added earlier.  If you wish for an object to be in the
+background, it must be added first.</p>
+<p>The <cite>timeout</cite> attribute is a simple way to provide a widget that quickly
+flashes up on screen, though the <cite>delay</cite> method in <cite>GameController</cite> has 
+the same effect.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="breakoutGraphics.GameView.remove">
+<tt class="descclassname">GameView.</tt><tt class="descname">remove</tt><big>(</big><em>widget</em><big>)</big><a class="reference internal" href="_modules/breakoutGraphics.html#GameView.remove"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#breakoutGraphics.GameView.remove" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes the widget from this view.</p>
+<blockquote>
+<div><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">param widget:</th><td class="field-body">widget to remove</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Precondition</strong>: a <cite>graphicsObject</cite> stored in this view</p>
+</div></blockquote>
+<p>Manually removes a <cite>graphicsObject</cite> widget from this view. You
+should call this method if the graphics object was added
+with timeout 0; otherwise the application will automatically
+remove the widget for you.</p>
+<p>This method does nothing if widget is not in this view.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Class GameView</a><ul>
+<li><a class="reference internal" href="#attributes">Attributes</a></li>
+<li><a class="reference internal" href="#methods">Methods</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="game.html"
+                        title="previous chapter">Game Classes</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="gamecontroller.html"
+                        title="next chapter">Class GameController</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/gameview.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="gamecontroller.html" title="Class GameController"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="game.html" title="Game Classes"
+             >previous</a> |</li>
+        <li><a href="index.html">Breakout 1.0.0 documentation</a> &raquo;</li>
+          <li><a href="game.html" >Game Classes</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Peter J. Mountanos.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.
+    </div>
+  </body>
+</html>
