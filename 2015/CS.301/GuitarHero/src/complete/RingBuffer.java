@@ -63,7 +63,7 @@ public class RingBuffer {
 	 * @return integer representing the capacity of the buffer.
 	 */
 	public int getCapacity() {
-		return this.size;
+		return this.rb.length;
 	}
 
 	/**
@@ -157,6 +157,9 @@ public class RingBuffer {
 	 * @see java.lang.Object#toString()
 	 */
 	public String toString() {
+		
+		int arr[] = {10, 6, 5, 2, 0, 8, 11, 15, 14, 6};
+
 		// instantiate a new string buffer to store string
 		StringBuffer sb = new StringBuffer("Ring Buffer: [");
 

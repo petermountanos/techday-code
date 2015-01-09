@@ -1,4 +1,5 @@
 package skeleton;
+
 import stdlib.StdDraw;
 
 /**
@@ -7,7 +8,6 @@ import stdlib.StdDraw;
  * programmer, and animates that ball using loops. There are several constants
  * in this class which help facilitate programming in other classes.
  * 
- * @author  YOUR NAME HERE
  * @author  Peter Mountanos 
  * @author  Alyssa Kelly
  * @version 1.0

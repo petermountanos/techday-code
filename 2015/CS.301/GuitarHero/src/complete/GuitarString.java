@@ -31,7 +31,7 @@ public class GuitarString {
   /**
    * RingBuffer to model the medium in which the energy travels back and forth.
    */
-  public RingBuffer buffer;
+  private RingBuffer buffer;
   
   /**
    * Integer storing the number of times the tics method has been called. 

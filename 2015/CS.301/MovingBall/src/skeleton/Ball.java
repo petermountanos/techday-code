@@ -49,7 +49,7 @@ public class Ball {
 	 * Radius of the circular ball.
 	 */
 	private double radius;
-	
+
 	/**
 	 * Constructor which instantiates a new Ball object, based
 	 * on the position components and radius given. The velocity

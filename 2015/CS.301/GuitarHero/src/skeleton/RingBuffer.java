@@ -8,7 +8,7 @@ package skeleton;
  * The buffer will be used to store note frequencies for the GuitarHero app
  * for CS.301 for Wantagh TechDay 2015.
  * 
- * @author  NAME HERE
+ * @author  YOUR NAME HERE
  * @author  Peter Mountanos 
  * @author  Alyssa Kelly
  * @version 1.0
@@ -41,9 +41,10 @@ public class RingBuffer {
 	 */
 	public RingBuffer(int capacity) {
 
-		//--------------------------------------//
-		//------------YOUR CODE HERE------------//
-		//--------------------------------------//
+		this.rb    = new double[capacity];
+		this.first = 0;
+		this.last  = 0;
+		this.size  = 0;
 
 	}
 
@@ -92,20 +93,6 @@ public class RingBuffer {
 		//--------------------------------------//
 
 		return false; // dummy return statement so the code compiles
-	}
-
-	/**
-	 * Method which returns the capacity of the current RingBuffer Object.
-	 * 
-	 * @return integer representing the capacity of the buffer.
-	 */
-	public int getCapacity() {
-		
-		//--------------------------------------//
-		//------------YOUR CODE HERE------------//
-		//--------------------------------------//
-
-		return 0; // dummy return statement so the code compiles
 	}
 
 	/**
@@ -176,6 +163,15 @@ public class RingBuffer {
 	//------------DO NOT ADD CODE BELOW THIS LINE------------//
 	//-------------------------------------------------------//
 	//-------------------------------------------------------//
+	
+	/**
+	 * Method which returns the capacity of the current RingBuffer Object.
+	 * 
+	 * @return integer representing the capacity of the buffer.
+	 */
+	public int getCapacity() {
+		return this.rb.length;
+	}
 	
 	/*
 	 * (non-Javadoc)
