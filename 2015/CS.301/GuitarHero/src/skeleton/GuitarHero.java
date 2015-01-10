@@ -6,7 +6,10 @@
 package skeleton;
 import stdlib.*;
 import shared.Song;
+
 import java.util.*;
+
+import complete.Guitar;
 
 /**
  * 
@@ -22,10 +25,22 @@ import java.util.*;
  * @since   December 30, 2014
  */
 public class GuitarHero {
-
+	// CLASS VARIABLES
+	/**
+	 * Reference to Guitar instance used to play the notes.
+	 */
 	public static Guitar myGuitar;
+	/**
+	 * Reference to song file...doesn't work yet (to come later).
+	 */
 	public static Song   mySong;
+	/**
+	 * Reference to linked list which stores previously played samples.
+	 */
 	public static LinkedList<Double> wave;
+	/**
+	 * Reference to last played sample to be used for visualization.
+	 */
 	public static double sample;
 
 	/**

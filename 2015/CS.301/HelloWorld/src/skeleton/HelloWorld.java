@@ -1,7 +1,7 @@
 package skeleton;
 
 /**
- * <i>HellWorld<i>. A basic HelloWorld program for first time programmers
+ * <i>HelloWorld<i>. A basic HelloWorld program for first time programmers
  * to say hello to the world of computer programming!
  * 
  * @author  YOUR NAME HERE
