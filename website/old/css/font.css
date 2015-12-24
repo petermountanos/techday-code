@@ -1,0 +1,13 @@
+@font-face {
+	font-family: 'HurryUpRegular';
+	src:
+		url('fonts/hurryup-webfont.eot');
+	src:
+		local('☺'),
+		url('fonts/hurryup-webfont.woff') format('woff'),
+		url('fonts/hurryup-webfont.ttf') format('truetype'),
+		url('fonts/hurryup-webfont.svg') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+

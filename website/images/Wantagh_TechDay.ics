@@ -1,0 +1,40 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//www.marudot.com//iCal Event Maker
+X-WR-CALNAME:Wantagh TechDay
+CALSCALE:GREGORIAN
+BEGIN:VTIMEZONE
+TZID:America/New_York
+TZURL:http://tzurl.org/zoneinfo-outlook/America/New_York
+X-LIC-LOCATION:America/New_York
+BEGIN:DAYLIGHT
+TZOFFSETFROM:-0500
+TZOFFSETTO:-0400
+TZNAME:EDT
+DTSTART:19700308T020000
+RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=2SU
+END:DAYLIGHT
+BEGIN:STANDARD
+TZOFFSETFROM:-0400
+TZOFFSETTO:-0500
+TZNAME:EST
+DTSTART:19701101T020000
+RRULE:FREQ=YEARLY;BYMONTH=11;BYDAY=1SU
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+DTSTAMP:20151112T035723Z
+UID:20151112T035723Z-785905205@marudot.com
+DTSTART;TZID="America/New_York":20160109T090000
+DTEND;TZID="America/New_York":20160109T160000
+SUMMARY:Wantagh TechDay
+URL:http%3A%2F%2Fwantaghstem.org
+DESCRIPTION:Wantagh TechDay is an annual event created by Wantagh School District alumni to promote computer science education. Motivated by code.org’s initiative\, the Wantagh TechDay team seeks to provide the opportunity for exposure to the practical skills of computer science that students could otherwise miss out on. As computers become smaller\, more efficient and more powerful\, they will exert a stronger influence in all fields and it will become necessary to understand basic notions of how they work and how they can be used. But beyond just giving students a useful tool\, we hope to cultivate the joy and enthusiasm we ourselves feel for this rewarding approach to problem solving. Most importantly\, when approached the right way\, computer science can be fun and our ultimate goal is to share the amusement!\n\nWantagh TechDay exposes students in 5th - 12th grade to computer science through a project-oriented day in which they learn and utilize a broad array of skills. Students are organized into small classes based on their experience levels and receive instruction from a lecturer and classroom assistants. By the end of the day\, students will have completed a project that will remain accessible. It is our hope that students will also walk away with the inspiration and ingenuity to attempt a project of their own.
+LOCATION:Wantagh High School
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Wantagh TechDay
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+END:VCALENDAR
